@@ -37,6 +37,8 @@ import androidx.navigation.compose.rememberNavController
 import dev.shiron.smallstride.domain.TargetClass
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
 
+var tmpTarget: TargetClass? = null
+
 val targetObj =
     TargetClass(
         title = "マイルストーン1",
@@ -73,16 +75,14 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = "calender/all") {
+                    NavHost(navController = navController, startDestination = "newtarget/new") {
                         composable("main") {
                             HomeScreen(navController = navController)
                         }
                         composable(
                             "newtarget/new"
                         ) {
-                            newTargetScreen {
-                                navController.navigate("newtarget/result")
-                            }
+                            newTargetScreen(navController = navController)
                         }
                         composable("newtarget/result") {
                             targetGenResultScreen(targetObj, navController)

@@ -35,3 +35,10 @@ data class MilestoneClass (
     var hint: String,
     var dayAt: Int
 )
+
+data class ReqTargetClass(
+    var title: String,
+    var startDay: Date,
+    var endDayAt: Int,
+    var marginQuickDayAt: Int
+)

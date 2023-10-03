@@ -4,10 +4,10 @@ import java.util.Date
 
 data class TargetClass (
     var title: String,
-    var description: String,
     var startDay: Date,
     var milestones: List<MilestoneClass>,
     var endDayAt: Int,
+    var quickDayAt: Int,
 ){
     fun getDayAt(): Int {
         val now = Date()

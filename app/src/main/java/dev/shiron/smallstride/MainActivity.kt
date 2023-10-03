@@ -40,9 +40,9 @@ import dev.shiron.smallstride.ui.theme.SmallStrideTheme
 val targetObj =
     TargetClass(
         title = "マイルストーン1",
-        description = "マイルストーン1の説明",
         startDay = java.util.Date(),
         endDayAt = 30,
+        quickDayAt = 0,
         milestones = listOf(
             dev.shiron.smallstride.domain.MilestoneClass(
                 title = "マイルストーン1-1",
@@ -73,7 +73,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = "newtarget/result") {
+                    NavHost(navController = navController, startDestination = "calender/all") {
                         composable("main") {
                             HomeScreen(navController = navController)
                         }
@@ -86,6 +86,10 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("newtarget/result") {
                             targetGenResultScreen(targetObj, navController)
+                        }
+                        composable("calender/all"){
+                            val target2 = targetObj.copy(title = "マイルストーン2!!")
+                            allCalenderScreen(navController, listOf(targetObj,target2))
                         }
                     }
                 }

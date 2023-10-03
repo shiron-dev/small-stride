@@ -96,7 +96,7 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("calender/all"){
                             val target2 = targetObj.copy(title = "マイルストーン2!!")
-                            allCalenderScreen(navController, listOf(targetObj,target2))
+                            allCalenderScreen(navController, loadAllTarget(LocalContext.current))
                         }
                     }
                 }
@@ -128,7 +128,7 @@ fun HomeScreen(navController: androidx.navigation.NavController,targets: List<Ta
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { navController.navigate("calender/all") },
                 colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
                 modifier = Modifier.fillMaxWidth()
             ) {

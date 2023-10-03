@@ -11,9 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -31,8 +29,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
-import dev.shiron.smallstride.domain.MilestoneClass
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import dev.shiron.smallstride.domain.TargetClass
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
 
 class MainActivity : ComponentActivity() {
@@ -42,7 +42,19 @@ class MainActivity : ComponentActivity() {
             SmallStrideTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    HomeScreen()
+                    val navController = rememberNavController()
+                    NavHost(navController = navController, startDestination = "newtarget/new") {
+                        composable("main") {
+                            HomeScreen(navController = navController)
+                        }
+                        composable(
+                            "newtarget/new"
+                        ) {
+                            newmissionScreen {
+                                navController.navigateUp()
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -50,7 +62,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(navController: androidx.navigation.NavController){
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -62,26 +74,28 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             // Child views.
-            NewMilestone()
+            newmissionButton {
+                navController.navigate("newtarget/new")
+            }
             MilestoneList(
                 listOf(
-                    MilestoneClass(
+                    TargetClass(
                         title = "マイルストーン1",
                         description = "マイルストーン1の説明",
                         startDay = java.util.Date(),
                         endDayAt = 30,
                         milestones = listOf(
-                            dev.shiron.smallstride.domain.SmallMilestone(
+                            dev.shiron.smallstride.domain.MilestoneClass(
                                 title = "マイルストーン1-1",
                                 hint = "マイルストーン1-1のヒント",
                                 dayAt = 1
                             ),
-                            dev.shiron.smallstride.domain.SmallMilestone(
+                            dev.shiron.smallstride.domain.MilestoneClass(
                                 title = "マイルストーン1-2",
                                 hint = "マイルストーン1-2のヒント",
                                 dayAt = 2
                             ),
-                            dev.shiron.smallstride.domain.SmallMilestone(
+                            dev.shiron.smallstride.domain.MilestoneClass(
                                 title = "マイルストーン1-3",
                                 hint = "マイルストーン1-3のヒント",
                                 dayAt = 3
@@ -131,21 +145,23 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun MilestoneList(milestoneList: List<MilestoneClass>,modifier: Modifier = Modifier){
+fun MilestoneList(milestoneList: List<TargetClass>){
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
         horizontalAlignment = Alignment.Start,
     ) {
         for (milestone in milestoneList) {
-            Milestone(milestone = milestone)
+            Milestone(milestone = milestone){
+                TODO()
+            }
         }
     }
 }
 
 @Composable
-fun Milestone(milestone:MilestoneClass, modifier: Modifier = Modifier) {
+fun Milestone(milestone: TargetClass, onClick: () -> Unit) {
     Button(
-        onClick = { /*TODO*/ },
+        onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.Black.copy(
                 alpha = 0f,
@@ -219,9 +235,9 @@ fun Milestone(milestone:MilestoneClass, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun NewMilestone(modifier: Modifier = Modifier) {
+fun newmissionButton(onClick: () -> Unit) {
     Button(
-        onClick = { /*TODO*/ },
+        onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.Black.copy(
                 alpha = 0f,
@@ -242,7 +258,7 @@ fun NewMilestone(modifier: Modifier = Modifier) {
                 .fillMaxWidth()
         ) {
             Text(
-                text = "新しいマイルストーンを設定する",
+                text = "新しい目標を設定する",
                 style = TextStyle(
                     fontSize = 16.sp,
                     fontWeight = FontWeight(400),
@@ -257,6 +273,6 @@ fun NewMilestone(modifier: Modifier = Modifier) {
 @Composable
 fun HomePreview() {
     SmallStrideTheme {
-        HomeScreen()
+        HomeScreen(navController = rememberNavController())
     }
 }

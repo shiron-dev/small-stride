@@ -86,6 +86,11 @@ class MainActivity : ComponentActivity() {
                         ) {
                             newTargetScreen(navController = navController)
                         }
+                        composable(
+                            "nowloading"
+                        ){
+                            nowLoadingScreen()
+                        }
                         composable("newtarget/result") {
                             if(tmpTarget != null) {
                                 targetGenResultScreen(tmpTarget!!, navController)

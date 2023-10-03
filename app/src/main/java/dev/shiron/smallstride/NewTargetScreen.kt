@@ -116,10 +116,14 @@ fun newTargetScreen(navController: NavController) {
                     Log.d("callApi", it.toString())
                 }){
                     tmpTarget = it
-                    if(it == null)return@callApi
+                    if(it == null) {
+                        navController.navigate("newtarget/new")
+                        return@callApi
+                    }
                     navController.navigate("newtarget/result")
                 }
 
+                navController.navigate("nowloading")
               },
             colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
             modifier = Modifier

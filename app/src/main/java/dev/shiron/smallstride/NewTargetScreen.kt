@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
@@ -40,81 +41,65 @@ import dev.shiron.smallstride.ui.theme.SmallStrideTheme
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun newmissionScreen(onClick: () -> Unit) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("目標を作成する") },
-                navigationIcon = {
-                    IconButton(onClick = onClick) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "go back"
-                        )
-                    }
-                },
-            )
-        }
+fun newTargetScreen(onClick: () -> Unit) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(100.dp, Alignment.Top),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(100.dp, Alignment.Top),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "30日で達成したい目標を入力しましょう！",
-                style = TextStyle(
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFF000000),
-                )
+        Text(
+            text = "30日で達成したい目標を入力しましょう！",
+            style = TextStyle(
+                fontSize = 24.sp,
+                fontWeight = FontWeight(400),
+                color = Color(0xFF000000),
             )
+        )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .height(50.dp)
+                .padding(start = 0.dp, top = 0.dp, end = 10.dp, bottom = 0.dp)
+        ) {
+            DayDropDownMenu()
             Row(
                 horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .height(50.dp)
-                    .padding(start = 0.dp, top = 0.dp, end = 10.dp, bottom = 0.dp)
-            ) {
-                DayDropDownMenu()
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .border(
-                            width = 1.dp,
-                            color = Color(0xFF7E7E7E),
-                            shape = RoundedCornerShape(size = 12.dp)
-                        )
-                        .background(
-                            color = Color(0xFFFFFFFF),
-                            shape = RoundedCornerShape(size = 12.dp)
-                        )
-                        .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 10.dp)
-                ) {
-                    val inputValue = rememberSaveable { mutableStateOf("") }
-                    BasicTextField(
-                        value = inputValue.value,
-                        onValueChange = { inputValue.value = it.toString() },
-                        decorationBox = { innerTextField ->
-                            Box(modifier = Modifier.fillMaxSize()) {
-                                if (inputValue.value.isEmpty()) {
-                                    Text("目標を入力")
-                                }
-                                innerTextField()
-                            }
-                        },
+                    .border(
+                        width = 1.dp,
+                        color = Color(0xFF7E7E7E),
+                        shape = RoundedCornerShape(size = 12.dp)
                     )
-                }
-            }
-
-            Button(
-                onClick = { /*TODO*/ },
-                colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
-                modifier = Modifier.fillMaxWidth().padding(100.dp)
+                    .background(
+                        color = Color(0xFFFFFFFF),
+                        shape = RoundedCornerShape(size = 12.dp)
+                    )
+                    .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 10.dp)
             ) {
-                Text("OK")
+                val inputValue = rememberSaveable { mutableStateOf("") }
+                BasicTextField(
+                    value = inputValue.value,
+                    onValueChange = { inputValue.value = it.toString() },
+                    decorationBox = { innerTextField ->
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            if (inputValue.value.isEmpty()) {
+                                Text("目標を入力")
+                            }
+                            innerTextField()
+                        }
+                    },
+                )
             }
+        }
+
+        Button(
+            onClick = { onClick() },
+            colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
+            modifier = Modifier.fillMaxWidth().padding(100.dp)
+        ) {
+            Text("OK")
         }
     }
 }
@@ -163,6 +148,6 @@ fun DayDropDownMenu() {
 @Composable
 fun newmissionScreenPreview() {
     SmallStrideTheme {
-        newmissionScreen(){}
+        newTargetScreen(){}
     }
 }

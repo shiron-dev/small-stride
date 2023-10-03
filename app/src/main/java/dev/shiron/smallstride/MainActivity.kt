@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -35,24 +37,55 @@ import androidx.navigation.compose.rememberNavController
 import dev.shiron.smallstride.domain.TargetClass
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
 
+val targetObj =
+    TargetClass(
+        title = "マイルストーン1",
+        description = "マイルストーン1の説明",
+        startDay = java.util.Date(),
+        endDayAt = 30,
+        milestones = listOf(
+            dev.shiron.smallstride.domain.MilestoneClass(
+                title = "マイルストーン1-1",
+                hint = "マイルストーン1-1のヒント",
+                dayAt = 1
+            ),
+            dev.shiron.smallstride.domain.MilestoneClass(
+                title = "マイルストーン1-2",
+                hint = "マイルストーン1-2のヒント",
+                dayAt = 2
+            ),
+            dev.shiron.smallstride.domain.MilestoneClass(
+                title = "マイルストーン1-3",
+                hint = "マイルストーン1-3のヒント",
+                dayAt = 3
+            ),
+        )
+    )
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             SmallStrideTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = "newtarget/new") {
+                    NavHost(navController = navController, startDestination = "newtarget/result") {
                         composable("main") {
                             HomeScreen(navController = navController)
                         }
                         composable(
                             "newtarget/new"
                         ) {
-                            newmissionScreen {
-                                navController.navigateUp()
+                            newTargetScreen {
+                                navController.navigate("newtarget/result")
                             }
+                        }
+                        composable("newtarget/result") {
+                            targetGenResultScreen(targetObj, navController)
                         }
                     }
                 }
@@ -79,29 +112,7 @@ fun HomeScreen(navController: androidx.navigation.NavController){
             }
             MilestoneList(
                 listOf(
-                    TargetClass(
-                        title = "マイルストーン1",
-                        description = "マイルストーン1の説明",
-                        startDay = java.util.Date(),
-                        endDayAt = 30,
-                        milestones = listOf(
-                            dev.shiron.smallstride.domain.MilestoneClass(
-                                title = "マイルストーン1-1",
-                                hint = "マイルストーン1-1のヒント",
-                                dayAt = 1
-                            ),
-                            dev.shiron.smallstride.domain.MilestoneClass(
-                                title = "マイルストーン1-2",
-                                hint = "マイルストーン1-2のヒント",
-                                dayAt = 2
-                            ),
-                            dev.shiron.smallstride.domain.MilestoneClass(
-                                title = "マイルストーン1-3",
-                                hint = "マイルストーン1-3のヒント",
-                                dayAt = 3
-                            ),
-                        )
-                    )
+                    targetObj
                 )
             )
         }
@@ -124,6 +135,7 @@ fun HomeScreen(navController: androidx.navigation.NavController){
                     )
                 )
             }
+            /*
             Button(
                 onClick = { /*TODO*/ },
                 colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
@@ -140,6 +152,8 @@ fun HomeScreen(navController: androidx.navigation.NavController){
                     )
                 )
             }
+
+             */
         }
     }
 }
@@ -149,6 +163,8 @@ fun MilestoneList(milestoneList: List<TargetClass>){
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
         horizontalAlignment = Alignment.Start,
+        modifier = Modifier
+            .verticalScroll(rememberScrollState())
     ) {
         for (milestone in milestoneList) {
             Milestone(milestone = milestone){

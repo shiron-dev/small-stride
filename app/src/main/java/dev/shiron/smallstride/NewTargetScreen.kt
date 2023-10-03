@@ -47,8 +47,8 @@ import java.util.Date
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun newTargetScreen(navController: NavController) {
-    var selectedNum by rememberSaveable { mutableStateOf(30) }
-    val titleInput = rememberSaveable { mutableStateOf("") }
+    var selectedNum by rememberSaveable { mutableStateOf(tmpTarget?.endDayAt ?:30) }
+    val titleInput = rememberSaveable { mutableStateOf(tmpTarget?.title ?:"") }
 
     Column(
         modifier = Modifier.fillMaxWidth(),

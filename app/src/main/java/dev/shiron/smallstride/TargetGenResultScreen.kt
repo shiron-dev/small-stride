@@ -85,7 +85,7 @@ fun targetGenResultScreen(target:TargetClass,navController: NavController) {
                     .padding(10.dp)
             ) {
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = { navController.navigate("newtarget/new") },
                     colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
                     modifier = Modifier
                         .fillMaxWidth()

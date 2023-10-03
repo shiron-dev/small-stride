@@ -1,15 +1,19 @@
 package dev.shiron.smallstride
 
-import android.util.Log
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -52,13 +56,13 @@ fun allCalenderScreen(navController: NavController,targets:List<TargetClass>) {
 
 @Composable
 fun milestonesList(targets: List<TargetClass>) {
-    val milestones = mutableListOf<Pair<Date, MilestoneClass>>()
+    val milestones = mutableListOf<Pair<Date, Pair<TargetClass, MilestoneClass>>>()
     for (target in targets) {
         for (milestone in target.milestones) {
             val calender = Calendar.getInstance()
             calender.time = target.startDay
             calender.add(Calendar.DATE, milestone.dayAt)
-            milestones.add(Pair(calender.time, milestone))
+            milestones.add(Pair(calender.time, Pair(target, milestone)))
         }
     }
     milestones.sortBy { it.first.time }
@@ -68,13 +72,13 @@ fun milestonesList(targets: List<TargetClass>) {
             .padding(10.dp).verticalScroll(rememberScrollState())
     ){
         var lastDate = Date(0)
-        var miles = mutableListOf<MilestoneClass>()
+        var miles = mutableListOf<Pair<TargetClass,MilestoneClass>>()
         for (milestone in milestones) {
             if (milestone.first != lastDate) {
                 if (miles.isNotEmpty()) {
                     milestoneList(date = lastDate, miles = miles)
                 }
-                miles = mutableListOf<MilestoneClass>()
+                miles = mutableListOf()
                 lastDate = milestone.first
             }
             miles.add(milestone.second)
@@ -84,7 +88,7 @@ fun milestonesList(targets: List<TargetClass>) {
 }
 
 @Composable
-fun milestoneList(date:Date,miles:List<MilestoneClass>) {
+fun milestoneList(date:Date,miles:List<Pair<TargetClass,MilestoneClass>>) {
     Row (
         modifier = Modifier.padding(10.dp)
     ){
@@ -100,8 +104,88 @@ fun milestoneList(date:Date,miles:List<MilestoneClass>) {
         )
         Column {
             for (mile in miles) {
-                milestoneContent(date, mile)
+                calMilestoneContent(date, mile.first, mile.second){
+                    TODO()
+                }
             }
+        }
+    }
+}
+
+@Composable
+fun calMilestoneContent(date: Date, targetClass:TargetClass,milestone: MilestoneClass, onClick: () -> Unit){
+
+    Button(
+        onClick = onClick,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Black.copy(
+                alpha = 0f,
+            ),
+        ),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .border(
+                    width = 1.dp,
+                    color = Color(0xFF022859),
+                    shape = RoundedCornerShape(size = 8.dp)
+                )
+                .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 8.dp))
+                .padding(start = 3.dp, top = 3.dp, end = 3.dp, bottom = 3.dp)
+                .fillMaxWidth()
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(
+                        progress = milestone.dayAt.toFloat() / targetClass.endDayAt.toFloat(),
+                        color = Color(0xFF8395F9)
+                    )
+                    Text("Day${milestone.dayAt}", color = Color(0xFF022859))
+                }
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
+                    horizontalAlignment = Alignment.Start,
+                ) {
+                    Text(
+                        text = milestone.title,
+                        style = TextStyle(
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight(400),
+                            color = Color(0xFF022859),
+                        )
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(start = 10.dp)
+                    ) {
+                        Text(
+                            text = milestone.title,
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight(400),
+                                color = Color(0xFF022859),
+                            )
+                        )
+                    }
+                }
+            }
+            Text(
+                text = ">",
+                style = TextStyle(
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight(400),
+                    color = Color(0xFF022859),
+                    textAlign = TextAlign.Center,
+                )
+            )
         }
     }
 }

@@ -1,6 +1,7 @@
 package dev.shiron.smallstride
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -33,9 +34,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.gson.Gson
 import dev.shiron.smallstride.domain.ReqTargetClass
 import dev.shiron.smallstride.domain.TargetClass
+import dev.shiron.smallstride.domain.callApi
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.Date
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -100,14 +105,21 @@ fun newTargetScreen(navController: NavController) {
 
         Button(
             onClick = {
+                if(titleInput.value.isEmpty())return@Button
                 val reqTarget = ReqTargetClass(
                     title = titleInput.value,
                     startDay = Date(),
                     endDayAt = selectedNum,
                     marginQuickDayAt = 0
                 )
+                callApi(reqTarget, onFailure = {
+                    Log.d("callApi", it.toString())
+                }){
+                    tmpTarget = it
+                    if(it == null)return@callApi
+                    navController.navigate("newtarget/result")
+                }
 
-                navController.navigate("newtarget/result")
               },
             colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
             modifier = Modifier

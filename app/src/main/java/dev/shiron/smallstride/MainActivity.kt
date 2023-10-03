@@ -85,7 +85,12 @@ class MainActivity : ComponentActivity() {
                             newTargetScreen(navController = navController)
                         }
                         composable("newtarget/result") {
-                            targetGenResultScreen(targetObj, navController)
+                            if(tmpTarget != null) {
+                                targetGenResultScreen(tmpTarget!!, navController)
+                            }else{
+                                // TODO("エラー画面への遷移")
+                                targetGenResultScreen(tmpTarget!!, navController)
+                            }
                         }
                         composable("calender/all"){
                             val target2 = targetObj.copy(title = "マイルストーン2!!")

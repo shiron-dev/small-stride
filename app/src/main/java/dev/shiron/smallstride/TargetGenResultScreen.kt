@@ -51,7 +51,7 @@ import java.util.Date
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun targetGenResultScreen(target:TargetClass,navController: NavController){
+fun targetGenResultScreen(target:TargetClass,navController: NavController) {
     val scrollState = rememberScrollState()
 
     Column(
@@ -78,28 +78,28 @@ fun targetGenResultScreen(target:TargetClass,navController: NavController){
             for (milestone in target.milestones) {
                 milestoneContent(target.startDay, milestone)
             }
-        }
 
-        Column(
-            verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
-            modifier = Modifier
-                .padding(10.dp)
-        ) {
-            Button(
-                onClick = { /*TODO*/ },
-                colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
+            Column(
+                verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .padding(10.dp)
             ) {
-                Text("変更")
-            }
-            Button(
-                onClick = { navController.navigate("main") },
-                colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Text("登録")
+                Button(
+                    onClick = { /*TODO*/ },
+                    colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Text("変更")
+                }
+                Button(
+                    onClick = { navController.navigate("main") },
+                    colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Text("登録")
+                }
             }
         }
     }

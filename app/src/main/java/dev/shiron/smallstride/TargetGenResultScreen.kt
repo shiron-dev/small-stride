@@ -53,7 +53,8 @@ import java.util.Date
 @Composable
 fun targetGenResultScreen(target:TargetClass,navController: NavController) {
     val scrollState = rememberScrollState()
-
+    val context = LocalContext.current
+    
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -93,7 +94,10 @@ fun targetGenResultScreen(target:TargetClass,navController: NavController) {
                     Text("変更")
                 }
                 Button(
-                    onClick = { navController.navigate("main") },
+                    onClick = {
+                        saveTarget(context, target)
+                        navController.navigate("main")
+                    },
                     colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
                     modifier = Modifier
                         .fillMaxWidth()

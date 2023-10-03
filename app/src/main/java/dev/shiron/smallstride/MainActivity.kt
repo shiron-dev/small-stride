@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -64,6 +65,7 @@ val targetObj =
         )
     )
 
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,9 +77,9 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = "newtarget/new") {
+                    NavHost(navController = navController, startDestination = "main") {
                         composable("main") {
-                            HomeScreen(navController = navController)
+                            HomeScreen(navController = navController, loadAllTarget(LocalContext.current))
                         }
                         composable(
                             "newtarget/new"
@@ -104,7 +106,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun HomeScreen(navController: androidx.navigation.NavController){
+fun HomeScreen(navController: androidx.navigation.NavController,targets: List<TargetClass>){
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -119,11 +121,7 @@ fun HomeScreen(navController: androidx.navigation.NavController){
             newmissionButton {
                 navController.navigate("newtarget/new")
             }
-            MilestoneList(
-                listOf(
-                    targetObj
-                )
-            )
+            MilestoneList(targets)
         }
         Column(
             verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.Top),
@@ -297,7 +295,8 @@ fun newmissionButton(onClick: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun HomePreview() {
+    val target2 = targetObj.copy(title = "マイルストーン2!!")
     SmallStrideTheme {
-        HomeScreen(navController = rememberNavController())
+        HomeScreen(navController = rememberNavController(),listOf(targetObj,target2))
     }
 }

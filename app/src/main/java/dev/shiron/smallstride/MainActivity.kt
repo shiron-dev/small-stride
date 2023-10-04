@@ -32,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -53,12 +54,12 @@ val targetObj =
                 dayAt = 1
             ),
             dev.shiron.smallstride.domain.MilestoneClass(
-                title = "マイルストーン1-2",
+                title = "マイルストーンのマイルストーン1-2",
                 hint = "マイルストーン1-2のヒント",
                 dayAt = 2
             ),
             dev.shiron.smallstride.domain.MilestoneClass(
-                title = "マイルストーン1-3",
+                title = "mile 1-3",
                 hint = "マイルストーン1-3のヒント",
                 dayAt = 3
             ),
@@ -103,6 +104,13 @@ class MainActivity : ComponentActivity() {
                             val target2 = targetObj.copy(title = "マイルストーン2!!")
                             allCalenderScreen(navController, loadAllTarget(LocalContext.current))
                         }
+                        composable("calender/target"){
+                            if(tmpTarget != null) {
+                                targetCalenderScreen(navController, tmpTarget!!)
+                            }else{
+                                navController.navigate("main")
+                            }
+                        }
                     }
                 }
             }
@@ -111,7 +119,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun HomeScreen(navController: androidx.navigation.NavController,targets: List<TargetClass>){
+fun HomeScreen(navController: NavController,targets: List<TargetClass>){
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -126,7 +134,7 @@ fun HomeScreen(navController: androidx.navigation.NavController,targets: List<Ta
             newmissionButton {
                 navController.navigate("newtarget/new")
             }
-            MilestoneList(targets)
+            MilestoneList(targets, navController)
         }
         Column(
             verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.Top),
@@ -171,7 +179,7 @@ fun HomeScreen(navController: androidx.navigation.NavController,targets: List<Ta
 }
 
 @Composable
-fun MilestoneList(milestoneList: List<TargetClass>){
+fun MilestoneList(milestoneList: List<TargetClass>, navController: NavController){
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
         horizontalAlignment = Alignment.Start,
@@ -180,7 +188,8 @@ fun MilestoneList(milestoneList: List<TargetClass>){
     ) {
         for (milestone in milestoneList) {
             Milestone(milestone = milestone){
-                TODO()
+                tmpTarget = milestone
+                navController.navigate("calender/target")
             }
         }
     }
@@ -256,7 +265,8 @@ fun Milestone(milestone: TargetClass, onClick: () -> Unit) {
                     fontWeight = FontWeight(400),
                     color = Color(0xFF022859),
                     textAlign = TextAlign.Center,
-                )
+                ),
+                modifier = Modifier.padding(4.dp)
             )
         }
     }

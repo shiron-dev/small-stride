@@ -43,7 +43,7 @@ fun allCalenderScreen(navController: NavController,targets:List<TargetClass>) {
                 color = Color(0xFF000000),
             )
         )
-        milestonesList(targets)
+        milestonesList(navController,targets)
         Button(
             onClick = { navController.navigate("home") },
             colors = ButtonDefaults.run { ButtonDefaults.buttonColors(Color(0xFF80A8FF)) },
@@ -55,7 +55,7 @@ fun allCalenderScreen(navController: NavController,targets:List<TargetClass>) {
 }
 
 @Composable
-fun milestonesList(targets: List<TargetClass>) {
+private fun milestonesList(navController: NavController,targets: List<TargetClass>) {
     val milestones = mutableListOf<Pair<Date, Pair<TargetClass, MilestoneClass>>>()
     for (target in targets) {
         for (milestone in target.milestones) {
@@ -76,19 +76,19 @@ fun milestonesList(targets: List<TargetClass>) {
         for (milestone in milestones) {
             if (milestone.first != lastDate) {
                 if (miles.isNotEmpty()) {
-                    milestoneList(date = lastDate, miles = miles)
+                    milestoneList(navController,date = lastDate, miles = miles)
                 }
                 miles = mutableListOf()
                 lastDate = milestone.first
             }
             miles.add(milestone.second)
         }
-        milestoneList(date = lastDate, miles = miles)
+        milestoneList(navController,date = lastDate, miles = miles)
     }
 }
 
 @Composable
-fun milestoneList(date:Date,miles:List<Pair<TargetClass,MilestoneClass>>) {
+private fun milestoneList(navController: NavController,date:Date,miles:List<Pair<TargetClass,MilestoneClass>>) {
     Row (
         modifier = Modifier.padding(10.dp)
     ){
@@ -102,10 +102,10 @@ fun milestoneList(date:Date,miles:List<Pair<TargetClass,MilestoneClass>>) {
                 color = Color(0xFF000000),
             )
         )
-        Column {
+        Column (modifier = Modifier.fillMaxWidth()){
             for (mile in miles) {
                 calMilestoneContent(date, mile.first, mile.second){
-                    TODO()
+                    tmpTarget = mile.first
                 }
             }
         }
@@ -113,7 +113,7 @@ fun milestoneList(date:Date,miles:List<Pair<TargetClass,MilestoneClass>>) {
 }
 
 @Composable
-fun calMilestoneContent(date: Date, targetClass:TargetClass,milestone: MilestoneClass, onClick: () -> Unit){
+private fun calMilestoneContent(date: Date, targetClass:TargetClass,milestone: MilestoneClass, onClick: () -> Unit) {
 
     Button(
         onClick = onClick,
@@ -122,11 +122,10 @@ fun calMilestoneContent(date: Date, targetClass:TargetClass,milestone: Milestone
                 alpha = 0f,
             ),
         ),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxSize()
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .border(
                     width = 1.dp,
@@ -134,12 +133,9 @@ fun calMilestoneContent(date: Date, targetClass:TargetClass,milestone: Milestone
                     shape = RoundedCornerShape(size = 8.dp)
                 )
                 .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 8.dp))
-                .padding(start = 3.dp, top = 3.dp, end = 3.dp, bottom = 3.dp)
-                .fillMaxWidth()
+                .fillMaxSize()
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            Row {
                 Box(
                     contentAlignment = Alignment.Center
                 ) {
@@ -177,22 +173,23 @@ fun calMilestoneContent(date: Date, targetClass:TargetClass,milestone: Milestone
                     }
                 }
             }
-            Text(
-                text = ">",
-                style = TextStyle(
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFF022859),
-                    textAlign = TextAlign.Center,
+            Column {
+                Text(
+                    text = ">",
+                    style = TextStyle(
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight(400),
+                        color = Color(0xFF022859)
+                    )
                 )
-            )
+            }
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun targetCalenderScreenPreview() {
+fun allCalenderScreenPreview() {
     val target2 = targetObj.copy(title = "マイルストーン2!!")
     SmallStrideTheme {
         allCalenderScreen(rememberNavController(),listOf(targetObj, target2))

@@ -123,8 +123,8 @@ private fun milestoneList(navController: NavController,date:Date,miles:List<Pair
             for (mile in miles) {
                 calMilestoneContent(date, mile.first, mile.second){
                     tmpTarget = mile.first
-                    navController.navigate("calender/target")
-                    TODO("本来ならヒント画面に飛ばすべき")
+                    tmpMilestone = mile.second
+                    navController.navigate("calender/milestone")
                 }
             }
         }
@@ -160,7 +160,8 @@ private fun calMilestoneContent(date: Date, targetClass:TargetClass,milestone: M
                 ) {
                     CircularProgressIndicator(
                         progress = milestone.dayAt.toFloat() / targetClass.endDayAt.toFloat(),
-                        color = Color(0xFF8395F9)
+                        color = Color(0xFF8395F9),
+                        modifier = Modifier.padding(top=4.dp)
                     )
                     Text("Day${milestone.dayAt}", color = Color(0xFF022859))
                 }

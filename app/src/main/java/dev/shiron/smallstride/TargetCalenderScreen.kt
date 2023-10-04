@@ -10,7 +10,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -32,7 +34,7 @@ fun targetCalenderScreen(navController: NavController,target: TargetClass) {
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .padding(start = 20.dp, top = 20.dp, end = 20.dp, bottom = 20.dp)
     ) {
         Text(
@@ -44,19 +46,13 @@ fun targetCalenderScreen(navController: NavController,target: TargetClass) {
             )
         )
         milestonesList(navController,target)
-        Button(
-            onClick = { navController.navigateUp() },
-            colors = ButtonDefaults.run { ButtonDefaults.buttonColors(Color(0xFF80A8FF)) },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("戻る")
-        }
     }
 }
 
 @Composable
 private fun milestonesList(navController:NavController,target: TargetClass) {
     val nowMilestone = target.getNowMilestone()
+    val context = LocalContext.current
     Column (
         modifier = Modifier
             .padding(10.dp).verticalScroll(rememberScrollState())
@@ -66,6 +62,50 @@ private fun milestonesList(navController:NavController,target: TargetClass) {
                 tmpTarget = target
                 tmpMilestone = mile
                 navController.navigate("calender/milestone")
+            }
+        }
+        Column {
+            Row(modifier=Modifier.fillMaxWidth()){
+                Button(
+                    onClick = {
+                        target.quickDayAt--
+                        val cal = Calendar.getInstance()
+                        cal.time = target.startDay
+                        cal.add(Calendar.DATE, 1)
+                        target.startDay = cal.time
+                        saveTarget(context, target)
+                        navController.navigate("main")
+                        },
+                    colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Text("遅れているのでマイルストーンを巻き戻す")
+                }
+                Spacer(modifier = Modifier.width(10.dp))
+                Button(
+                    onClick = {
+                          target.quickDayAt++
+                        val cal = Calendar.getInstance()
+                        cal.time = target.startDay
+                        cal.add(Calendar.DATE, -1)
+                        target.startDay = cal.time
+                        saveTarget(context, target)
+                        navController.navigate("main")
+                      },
+                    colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Text("進んでいるのでマイルストーンを進める")
+                }
+            }
+            Button(
+                onClick = { navController.navigateUp() },
+                colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("戻る")
             }
         }
     }

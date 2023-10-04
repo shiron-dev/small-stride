@@ -51,7 +51,7 @@ fun milestoneCalenderScreen(navController: NavController, target: TargetClass, m
                 color = Color(0xFF000000),
             )
         )
-        Column (verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.Top)) {
+        Column(verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.Top)) {
             Row(horizontalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterHorizontally)) {
                 Text(
                     "Day${milestone.dayAt}",
@@ -83,7 +83,8 @@ fun milestoneCalenderScreen(navController: NavController, target: TargetClass, m
                 )
             )
             Button(
-                onClick = { expanded = !expanded}, modifier = Modifier
+                onClick = { expanded = !expanded },
+                modifier = Modifier
                     .fillMaxWidth()
                     .border(
                         width = 1.dp,
@@ -105,7 +106,7 @@ fun milestoneCalenderScreen(navController: NavController, target: TargetClass, m
                             color = Color(0xFF000000),
                         )
                     )
-                    if(expanded) {
+                    if (expanded) {
                         Text(
                             text = milestone.hint,
                             style = TextStyle(
@@ -120,7 +121,10 @@ fun milestoneCalenderScreen(navController: NavController, target: TargetClass, m
         }
         Column {
             Button(
-                onClick = { navController.navigateUp() },
+                onClick = {
+                    tmpTarget = target
+                    navController.navigate("calender/target")
+                },
                 colors = ButtonDefaults.run { ButtonDefaults.buttonColors(Color(0xFF80A8FF)) },
                 modifier = Modifier.fillMaxWidth()
             ) {

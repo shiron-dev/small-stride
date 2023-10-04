@@ -14,14 +14,19 @@ fun loadFileList(context: Context):FileListClass {
     return readFile(context, "fileList.json")?.let{Gson().fromJson(it, FileListClass::class.java)} ?: FileListClass(mutableListOf())
 }
 
-fun saveTarget(context: Context, targetClass: TargetClass) {
+fun saveTarget(context: Context, targetClass: TargetClass):TargetClass {
     val fileList = loadFileList(context)
-    val fileName = "${UUID.randomUUID()}.json"
+    val fileName =  targetClass.fileName ?: "${UUID.randomUUID()}.json"
+    if(targetClass.fileName == null)
+        fileList.files.add(fileName)
+
+    targetClass.fileName = fileName
 
     saveFile(context, fileName, Gson().toJson(targetClass))
 
-    fileList.files.add(fileName)
     saveFile(context, "fileList.json", Gson().toJson(fileList))
+
+    return targetClass
 }
 
 fun loadAllTarget(context: Context):List<TargetClass> {

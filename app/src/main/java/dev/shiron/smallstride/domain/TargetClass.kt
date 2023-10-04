@@ -8,6 +8,7 @@ data class TargetClass (
     var milestones: List<MilestoneClass>,
     var endDayAt: Int,
     var quickDayAt: Int,
+    var fileName: String? = null
 ){
     fun getDayAt(): Int {
         val now = Date()

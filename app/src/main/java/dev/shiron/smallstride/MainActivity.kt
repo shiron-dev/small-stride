@@ -101,12 +101,10 @@ class MainActivity : ComponentActivity() {
                             if(tmpTarget != null) {
                                 targetGenResultScreen(tmpTarget!!, navController)
                             }else{
-                                // TODO("エラー画面への遷移")
-                                targetGenResultScreen(tmpTarget!!, navController)
+                                navController.navigate("main")
                             }
                         }
                         composable("calender/all"){
-                            val target2 = targetObj.copy(title = "マイルストーン2!!")
                             allCalenderScreen(navController, loadAllTarget(LocalContext.current))
                         }
                         composable("calender/target"){

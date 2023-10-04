@@ -38,10 +38,12 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import dev.shiron.smallstride.domain.MilestoneClass
 import dev.shiron.smallstride.domain.TargetClass
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
 
 var tmpTarget: TargetClass? = null
+var tmpMilestone: MilestoneClass? = null
 
 val targetObj =
     TargetClass(
@@ -110,6 +112,13 @@ class MainActivity : ComponentActivity() {
                         composable("calender/target"){
                             if(tmpTarget != null) {
                                 targetCalenderScreen(navController, tmpTarget!!)
+                            }else{
+                                navController.navigate("main")
+                            }
+                        }
+                        composable("calender/milestone"){
+                            if(tmpMilestone != null && tmpTarget != null) {
+                                milestoneCalenderScreen(navController, tmpTarget!!,tmpMilestone!!)
                             }else{
                                 navController.navigate("main")
                             }

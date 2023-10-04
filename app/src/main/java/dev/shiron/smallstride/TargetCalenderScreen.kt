@@ -43,7 +43,7 @@ fun targetCalenderScreen(navController: NavController,target: TargetClass) {
                 color = Color(0xFF000000),
             )
         )
-        milestonesList(target)
+        milestonesList(navController,target)
         Button(
             onClick = { navController.navigateUp() },
             colors = ButtonDefaults.run { ButtonDefaults.buttonColors(Color(0xFF80A8FF)) },
@@ -55,7 +55,7 @@ fun targetCalenderScreen(navController: NavController,target: TargetClass) {
 }
 
 @Composable
-private fun milestonesList(target: TargetClass) {
+private fun milestonesList(navController:NavController,target: TargetClass) {
     val nowMilestone = target.getNowMilestone()
     Column (
         modifier = Modifier
@@ -63,7 +63,9 @@ private fun milestonesList(target: TargetClass) {
     ){
         for (mile in target.milestones) {
             calMilestoneContent(target.startDay, mile, nowMilestone == mile) {
-                TODO()
+                tmpTarget = target
+                tmpMilestone = mile
+                navController.navigate("calender/milestone")
             }
         }
     }

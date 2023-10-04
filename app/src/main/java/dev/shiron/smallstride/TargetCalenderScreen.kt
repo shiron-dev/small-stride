@@ -56,12 +56,13 @@ fun targetCalenderScreen(navController: NavController,target: TargetClass) {
 
 @Composable
 private fun milestonesList(target: TargetClass) {
+    val nowMilestone = target.getNowMilestone()
     Column (
         modifier = Modifier
             .padding(10.dp).verticalScroll(rememberScrollState())
     ){
         for (mile in target.milestones) {
-            calMilestoneContent(target.startDay, mile){
+            calMilestoneContent(target.startDay, mile, nowMilestone == mile) {
                 TODO()
             }
         }
@@ -69,7 +70,7 @@ private fun milestonesList(target: TargetClass) {
 }
 
 @Composable
-private fun calMilestoneContent(startDay: Date,milestoneClass: MilestoneClass, onClick: () -> Unit){
+private fun calMilestoneContent(startDay: Date, milestoneClass: MilestoneClass, isToday: Boolean =false, onClick: () -> Unit){
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
@@ -87,7 +88,7 @@ private fun calMilestoneContent(startDay: Date,milestoneClass: MilestoneClass, o
                 .fillMaxWidth()
                 .border(
                     width = 1.dp,
-                    color = Color(0xFF000000),
+                    color = Color(if(isToday) 0xFFFF6D6D else 0xFF000000),
                     shape = RoundedCornerShape(size = 4.dp)
                 )
                 .padding(start = 4.dp, top = 4.dp, end = 4.dp, bottom = 4.dp)

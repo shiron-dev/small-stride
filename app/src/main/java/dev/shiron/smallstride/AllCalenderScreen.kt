@@ -1,5 +1,8 @@
 package dev.shiron.smallstride
 
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -23,9 +26,12 @@ import dev.shiron.smallstride.domain.MilestoneClass
 import dev.shiron.smallstride.domain.TargetClass
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.ZoneId
 import java.util.Calendar
 import java.util.Date
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun allCalenderScreen(navController: NavController,targets:List<TargetClass>) {
 
@@ -54,6 +60,7 @@ fun allCalenderScreen(navController: NavController,targets:List<TargetClass>) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 private fun milestonesList(navController: NavController,targets: List<TargetClass>) {
     val milestones = mutableListOf<Pair<Date, Pair<TargetClass, MilestoneClass>>>()
@@ -87,10 +94,20 @@ private fun milestonesList(navController: NavController,targets: List<TargetClas
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 private fun milestoneList(navController: NavController,date:Date,miles:List<Pair<TargetClass,MilestoneClass>>) {
+    var modifier =Modifier.padding(10.dp)
+    if(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate() == LocalDate.now()){
+        modifier = modifier
+            .border(
+                width = 1.dp,
+                color = Color(0xFFFF6D6D),
+                shape = RoundedCornerShape(size = 8.dp)
+            )
+    }
     Row (
-        modifier = Modifier.padding(10.dp)
+        modifier = modifier
     ){
         val sdf = SimpleDateFormat("MM/dd")
         Text(
@@ -106,6 +123,8 @@ private fun milestoneList(navController: NavController,date:Date,miles:List<Pair
             for (mile in miles) {
                 calMilestoneContent(date, mile.first, mile.second){
                     tmpTarget = mile.first
+                    navController.navigate("calender/target")
+                    TODO("本来ならヒント画面に飛ばすべき")
                 }
             }
         }
@@ -187,6 +206,7 @@ private fun calMilestoneContent(date: Date, targetClass:TargetClass,milestone: M
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun allCalenderScreenPreview() {

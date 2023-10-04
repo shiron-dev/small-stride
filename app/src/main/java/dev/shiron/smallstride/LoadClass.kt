@@ -8,7 +8,6 @@ import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 import java.io.IOException
-import java.util.UUID
 
 fun loadFileList(context: Context):FileListClass {
     return readFile(context, "fileList.json")?.let{Gson().fromJson(it, FileListClass::class.java)} ?: FileListClass(mutableListOf())
@@ -16,13 +15,10 @@ fun loadFileList(context: Context):FileListClass {
 
 fun saveTarget(context: Context, targetClass: TargetClass):TargetClass {
     val fileList = loadFileList(context)
-    val fileName =  targetClass.fileName ?: "${UUID.randomUUID()}.json"
-    if(targetClass.fileName == null)
-        fileList.files.add(fileName)
+    if(!fileList.files.contains(targetClass.fileName))
+        fileList.files.add(targetClass.fileName)
 
-    targetClass.fileName = fileName
-
-    saveFile(context, fileName, Gson().toJson(targetClass))
+    saveFile(context, targetClass.fileName, Gson().toJson(targetClass))
 
     saveFile(context, "fileList.json", Gson().toJson(fileList))
 

@@ -51,6 +51,7 @@ val targetObj =
         startDay = java.util.Date(),
         endDayAt = 30,
         quickDayAt = 0,
+        fileName= "test.json",
         milestones = listOf(
             MilestoneClass(
                 title = "マイルストーン1-1",
@@ -99,7 +100,7 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("newtarget/result") {
                             if(tmpTarget != null) {
-                                targetGenResultScreen(tmpTarget!!, navController)
+                                TargetGenResultScreen(tmpTarget!!, navController)
                             }else{
                                 tmpTarget = null
                                 tmpMilestone = null

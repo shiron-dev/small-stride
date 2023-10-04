@@ -206,6 +206,7 @@ fun MilestoneList(milestoneList: List<TargetClass>, navController: NavController
             .verticalScroll(rememberScrollState())
     ) {
         for (milestone in milestoneList) {
+            if(milestone.getDayAt() > milestone.endDayAt) continue
             Milestone(milestone = milestone){
                 tmpTarget = milestone
                 navController.navigate("calender/target")

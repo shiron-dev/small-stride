@@ -74,14 +74,13 @@ private fun MilestonesList(navController:NavController, target: TargetClass) {
             Row(modifier=Modifier.fillMaxWidth()){
                 Button(
                     onClick = {
+                        if(target.getDayAt() == 1) return@Button
                         target.quickDayAt--
                         val cal = Calendar.getInstance()
                         cal.time = target.startDay
                         cal.add(Calendar.DATE, 1)
                         target.startDay = cal.time
                         saveTarget(context, target)
-                        tmpTarget = null
-                        tmpMilestone = null
                         navController.navigate("main")
                         },
                     colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
@@ -93,14 +92,13 @@ private fun MilestonesList(navController:NavController, target: TargetClass) {
                 Spacer(modifier = Modifier.width(10.dp))
                 Button(
                     onClick = {
+                        if(target.quickDayAt == target.endDayAt)return@Button
                           target.quickDayAt++
                         val cal = Calendar.getInstance()
                         cal.time = target.startDay
                         cal.add(Calendar.DATE, -1)
                         target.startDay = cal.time
                         saveTarget(context, target)
-                        tmpTarget = null
-                        tmpMilestone = null
                         navController.navigate("main")
                       },
                     colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },

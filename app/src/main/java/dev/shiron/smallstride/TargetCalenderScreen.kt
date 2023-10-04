@@ -1,21 +1,27 @@
 package dev.shiron.smallstride
 
-import androidx.compose.foundation.background
+import android.annotation.SuppressLint
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,7 +35,7 @@ import java.util.Calendar
 import java.util.Date
 
 @Composable
-fun targetCalenderScreen(navController: NavController,target: TargetClass) {
+fun TargetCalenderScreen(navController: NavController, target: TargetClass) {
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
@@ -45,12 +51,12 @@ fun targetCalenderScreen(navController: NavController,target: TargetClass) {
                 color = Color(0xFF000000),
             )
         )
-        milestonesList(navController,target)
+        MilestonesList(navController,target)
     }
 }
 
 @Composable
-private fun milestonesList(navController:NavController,target: TargetClass) {
+private fun MilestonesList(navController:NavController, target: TargetClass) {
     val nowMilestone = target.getNowMilestone()
     val context = LocalContext.current
     Column (
@@ -58,7 +64,7 @@ private fun milestonesList(navController:NavController,target: TargetClass) {
             .padding(10.dp).verticalScroll(rememberScrollState())
     ){
         for (mile in target.milestones) {
-            calMilestoneContent(target.startDay, mile, nowMilestone == mile) {
+            CalMilestoneContent(target.startDay, mile, nowMilestone == mile) {
                 tmpTarget = target
                 tmpMilestone = mile
                 navController.navigate("calender/milestone")
@@ -74,6 +80,8 @@ private fun milestonesList(navController:NavController,target: TargetClass) {
                         cal.add(Calendar.DATE, 1)
                         target.startDay = cal.time
                         saveTarget(context, target)
+                        tmpTarget = null
+                        tmpMilestone = null
                         navController.navigate("main")
                         },
                     colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
@@ -91,6 +99,8 @@ private fun milestonesList(navController:NavController,target: TargetClass) {
                         cal.add(Calendar.DATE, -1)
                         target.startDay = cal.time
                         saveTarget(context, target)
+                        tmpTarget = null
+                        tmpMilestone = null
                         navController.navigate("main")
                       },
                     colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
@@ -111,8 +121,9 @@ private fun milestonesList(navController:NavController,target: TargetClass) {
     }
 }
 
+@SuppressLint("SimpleDateFormat")
 @Composable
-private fun calMilestoneContent(startDay: Date, milestoneClass: MilestoneClass, isToday: Boolean =false, onClick: () -> Unit){
+private fun CalMilestoneContent(startDay: Date, milestoneClass: MilestoneClass, isToday: Boolean =false, onClick: () -> Unit){
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
@@ -176,8 +187,8 @@ private fun calMilestoneContent(startDay: Date, milestoneClass: MilestoneClass, 
 
 @Preview(showBackground = true)
 @Composable
-fun targetCalenderScreenPreview() {
+fun TargetCalenderScreenPreview() {
     SmallStrideTheme {
-        targetCalenderScreen(rememberNavController(), targetObj)
+        TargetCalenderScreen(rememberNavController(), targetObj)
     }
 }

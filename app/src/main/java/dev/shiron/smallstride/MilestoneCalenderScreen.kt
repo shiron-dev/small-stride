@@ -1,13 +1,17 @@
 package dev.shiron.smallstride
 
-import android.util.Log
-import androidx.compose.foundation.background
+import android.annotation.SuppressLint
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,11 +32,10 @@ import dev.shiron.smallstride.domain.TargetClass
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
-import kotlin.math.exp
 
+@SuppressLint("SimpleDateFormat")
 @Composable
-fun milestoneCalenderScreen(navController: NavController, target: TargetClass, milestone: MilestoneClass) {
+fun MilestoneCalenderScreen(navController: NavController, target: TargetClass, milestone: MilestoneClass) {
 
     var expanded by remember { mutableStateOf(false) }
 
@@ -99,7 +101,7 @@ fun milestoneCalenderScreen(navController: NavController, target: TargetClass, m
             ) {
                 Column {
                     Text(
-                        text = "Hintを開く",
+                        text = "Hintを${if(expanded) "閉じる" else "開く" }",
                         style = TextStyle(
                             fontSize = 20.sp,
                             fontWeight = FontWeight(400),
@@ -125,14 +127,14 @@ fun milestoneCalenderScreen(navController: NavController, target: TargetClass, m
                     tmpTarget = target
                     navController.navigate("calender/target")
                 },
-                colors = ButtonDefaults.run { ButtonDefaults.buttonColors(Color(0xFF80A8FF)) },
+                colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("目標の予定へ")
             }
             Button(
                 onClick = { navController.navigateUp() },
-                colors = ButtonDefaults.run { ButtonDefaults.buttonColors(Color(0xFF80A8FF)) },
+                colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("戻る")
@@ -143,8 +145,8 @@ fun milestoneCalenderScreen(navController: NavController, target: TargetClass, m
 
 @Preview(showBackground = true)
 @Composable
-fun milestoneCalenderScreen() {
+fun MilestoneCalenderScreen() {
     SmallStrideTheme {
-        milestoneCalenderScreen(rememberNavController(), targetObj, targetObj.milestones.first())
+        MilestoneCalenderScreen(rememberNavController(), targetObj, targetObj.milestones.first())
     }
 }

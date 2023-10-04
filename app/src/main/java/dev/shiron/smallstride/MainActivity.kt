@@ -52,17 +52,17 @@ val targetObj =
         endDayAt = 30,
         quickDayAt = 0,
         milestones = listOf(
-            dev.shiron.smallstride.domain.MilestoneClass(
+            MilestoneClass(
                 title = "マイルストーン1-1",
                 hint = "マイルストーン1-1のヒント",
                 dayAt = 1
             ),
-            dev.shiron.smallstride.domain.MilestoneClass(
+            MilestoneClass(
                 title = "マイルストーンのマイルストーン1-2",
                 hint = "マイルストーン1-2のヒント",
                 dayAt = 2
             ),
-            dev.shiron.smallstride.domain.MilestoneClass(
+            MilestoneClass(
                 title = "mile 1-3",
                 hint = "マイルストーン1-3のヒント",
                 dayAt = 3
@@ -90,7 +90,7 @@ class MainActivity : ComponentActivity() {
                         composable(
                             "newtarget/new"
                         ) {
-                            newTargetScreen(navController = navController)
+                            NewTargetScreen(navController = navController)
                         }
                         composable(
                             "nowloading"
@@ -101,23 +101,29 @@ class MainActivity : ComponentActivity() {
                             if(tmpTarget != null) {
                                 targetGenResultScreen(tmpTarget!!, navController)
                             }else{
+                                tmpTarget = null
+                                tmpMilestone = null
                                 navController.navigate("main")
                             }
                         }
                         composable("calender/all"){
-                            allCalenderScreen(navController, loadAllTarget(LocalContext.current))
+                            AllCalenderScreen(navController, loadAllTarget(LocalContext.current))
                         }
                         composable("calender/target"){
                             if(tmpTarget != null) {
-                                targetCalenderScreen(navController, tmpTarget!!)
+                                TargetCalenderScreen(navController, tmpTarget!!)
                             }else{
+                                tmpTarget = null
+                                tmpMilestone = null
                                 navController.navigate("main")
                             }
                         }
                         composable("calender/milestone"){
                             if(tmpMilestone != null && tmpTarget != null) {
-                                milestoneCalenderScreen(navController, tmpTarget!!,tmpMilestone!!)
+                                MilestoneCalenderScreen(navController, tmpTarget!!,tmpMilestone!!)
                             }else{
+                                tmpTarget = null
+                                tmpMilestone = null
                                 navController.navigate("main")
                             }
                         }
@@ -141,7 +147,9 @@ fun HomeScreen(navController: NavController,targets: List<TargetClass>){
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             // Child views.
-            newmissionButton {
+            NewTargetButton {
+                tmpTarget = null
+                tmpMilestone = null
                 navController.navigate("newtarget/new")
             }
             MilestoneList(targets, navController)
@@ -283,7 +291,7 @@ fun Milestone(milestone: TargetClass, onClick: () -> Unit) {
 }
 
 @Composable
-fun newmissionButton(onClick: () -> Unit) {
+fun NewTargetButton(onClick: () -> Unit) {
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(

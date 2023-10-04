@@ -16,13 +16,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,19 +32,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.google.gson.Gson
 import dev.shiron.smallstride.domain.ReqTargetClass
-import dev.shiron.smallstride.domain.TargetClass
 import dev.shiron.smallstride.domain.callApi
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
-import java.net.HttpURLConnection
-import java.net.URL
 import java.util.Date
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun newTargetScreen(navController: NavController) {
+fun NewTargetScreen(navController: NavController) {
     var selectedNum by remember { mutableStateOf(tmpTarget?.endDayAt ?:30) }
     val titleInput = remember { mutableStateOf(tmpTarget?.title ?:"") }
 
@@ -90,7 +83,7 @@ fun newTargetScreen(navController: NavController) {
             ) {
                 BasicTextField(
                     value = titleInput.value,
-                    onValueChange = { titleInput.value = it.toString() },
+                    onValueChange = { titleInput.value = it },
                     decorationBox = { innerTextField ->
                         Box(modifier = Modifier.fillMaxSize()) {
                             if (titleInput.value.isEmpty()) {
@@ -190,8 +183,8 @@ fun DayDropDownMenu(selectedNum: Int, onClick:(item: Int) -> Unit) {
 
 @Preview(showBackground = true)
 @Composable
-fun newmissionScreenPreview() {
+fun NewTargetScreenPreview() {
     SmallStrideTheme {
-        newTargetScreen(rememberNavController())
+        NewTargetScreen(rememberNavController())
     }
 }

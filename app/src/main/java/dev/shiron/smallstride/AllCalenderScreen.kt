@@ -1,7 +1,7 @@
 package dev.shiron.smallstride
 
+import android.annotation.SuppressLint
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,7 +32,7 @@ import java.util.Date
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun allCalenderScreen(navController: NavController,targets:List<TargetClass>) {
+fun AllCalenderScreen(navController: NavController, targets:List<TargetClass>) {
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
@@ -49,10 +48,10 @@ fun allCalenderScreen(navController: NavController,targets:List<TargetClass>) {
                 color = Color(0xFF000000),
             )
         )
-        milestonesList(navController,targets)
+        MilestonesList(navController,targets)
         Button(
             onClick = { navController.navigate("home") },
-            colors = ButtonDefaults.run { ButtonDefaults.buttonColors(Color(0xFF80A8FF)) },
+            colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("ホームに戻る")
@@ -62,7 +61,7 @@ fun allCalenderScreen(navController: NavController,targets:List<TargetClass>) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-private fun milestonesList(navController: NavController,targets: List<TargetClass>) {
+private fun MilestonesList(navController: NavController, targets: List<TargetClass>) {
     val milestones = mutableListOf<Pair<Date, Pair<TargetClass, MilestoneClass>>>()
     for (target in targets) {
         for (milestone in target.milestones) {
@@ -83,20 +82,21 @@ private fun milestonesList(navController: NavController,targets: List<TargetClas
         for (milestone in milestones) {
             if (milestone.first != lastDate) {
                 if (miles.isNotEmpty()) {
-                    milestoneList(navController,date = lastDate, miles = miles)
+                    MilestoneList(navController,date = lastDate, miles = miles)
                 }
                 miles = mutableListOf()
                 lastDate = milestone.first
             }
             miles.add(milestone.second)
         }
-        milestoneList(navController,date = lastDate, miles = miles)
+        MilestoneList(navController,date = lastDate, miles = miles)
     }
 }
 
+@SuppressLint("SimpleDateFormat")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-private fun milestoneList(navController: NavController,date:Date,miles:List<Pair<TargetClass,MilestoneClass>>) {
+private fun MilestoneList(navController: NavController, date:Date, miles:List<Pair<TargetClass,MilestoneClass>>) {
     var modifier =Modifier.padding(10.dp)
     if(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate() == LocalDate.now()){
         modifier = modifier
@@ -121,7 +121,7 @@ private fun milestoneList(navController: NavController,date:Date,miles:List<Pair
         )
         Column (modifier = Modifier.fillMaxWidth()){
             for (mile in miles) {
-                calMilestoneContent(date, mile.first, mile.second){
+                CalMilestoneContent(mile.first, mile.second){
                     tmpTarget = mile.first
                     tmpMilestone = mile.second
                     navController.navigate("calender/milestone")
@@ -132,7 +132,11 @@ private fun milestoneList(navController: NavController,date:Date,miles:List<Pair
 }
 
 @Composable
-private fun calMilestoneContent(date: Date, targetClass:TargetClass,milestone: MilestoneClass, onClick: () -> Unit) {
+private fun CalMilestoneContent(
+    targetClass: TargetClass,
+    milestone: MilestoneClass,
+    onClick: () -> Unit
+) {
 
     Button(
         onClick = onClick,
@@ -210,9 +214,9 @@ private fun calMilestoneContent(date: Date, targetClass:TargetClass,milestone: M
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
-fun allCalenderScreenPreview() {
+fun AllCalenderScreenPreview() {
     val target2 = targetObj.copy(title = "マイルストーン2!!")
     SmallStrideTheme {
-        allCalenderScreen(rememberNavController(),listOf(targetObj, target2))
+        AllCalenderScreen(rememberNavController(),listOf(targetObj, target2))
     }
 }

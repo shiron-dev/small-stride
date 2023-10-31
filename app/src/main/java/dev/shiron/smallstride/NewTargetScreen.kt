@@ -49,7 +49,7 @@ fun NewTargetScreen(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "30日で達成したい目標を入力しましょう！",
+            text = "${selectedNum}日で達成したい目標を入力しましょう！",
             style = TextStyle(
                 fontSize = 24.sp,
                 fontWeight = FontWeight(400),
@@ -83,6 +83,7 @@ fun NewTargetScreen(navController: NavController) {
             ) {
                 BasicTextField(
                     value = titleInput.value,
+                    singleLine = true,
                     onValueChange = { titleInput.value = it },
                     decorationBox = { innerTextField ->
                         Box(modifier = Modifier.fillMaxSize()) {

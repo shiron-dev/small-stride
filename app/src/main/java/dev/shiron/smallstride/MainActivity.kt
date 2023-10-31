@@ -76,6 +76,16 @@ class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val intent = intent
+        val deepLinkUri = intent.data
+
+        if (deepLinkUri != null) {
+            val deepLinkData = deepLinkUri.toString()
+
+            println(deepLinkData)
+        }
+
         setContent {
             SmallStrideTheme {
                 // A surface container using the 'background' color from the theme
@@ -255,7 +265,7 @@ fun Milestone(milestone: TargetClass, onClick: () -> Unit) {
                     horizontalAlignment = Alignment.Start,
                 ) {
                     Text(
-                        text = milestone.title,
+                        text = "${milestone.endDayAt}日で${milestone.title}",
                         style = TextStyle(
                             fontSize = 16.sp,
                             fontWeight = FontWeight(400),

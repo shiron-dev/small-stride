@@ -197,16 +197,16 @@ private fun CalMilestoneContent(
                     }
                 }
             }
-            Column {
-                Text(
-                    text = ">",
-                    style = TextStyle(
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight(400),
-                        color = Color(0xFF022859)
-                    )
-                )
-            }
+//            Column {
+//                Text(
+//                    text = ">",
+//                    style = TextStyle(
+//                        fontSize = 32.sp,
+//                        fontWeight = FontWeight(400),
+//                        color = Color(0xFF022859)
+//                    )
+//                )
+//            }
         }
     }
 }

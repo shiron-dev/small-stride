@@ -29,10 +29,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import dev.shiron.smallstride.model.TargetClass
-import dev.shiron.smallstride.targetObj
 import dev.shiron.smallstride.tmpMilestone
 import dev.shiron.smallstride.tmpTarget
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
+import dev.shiron.smallstride.view.dummyTarget
 
 
 @Composable
@@ -230,8 +230,8 @@ fun NewTargetButton(onClick: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun HomePreview() {
-    val target2 = targetObj.copy(title = "マイルストーン2!!")
+    val target2 = dummyTarget.copy(title = "マイルストーン2!!")
     SmallStrideTheme {
-        HomeScreen(navController = rememberNavController(),listOf(targetObj,target2))
+        HomeScreen(navController = rememberNavController(),listOf(dummyTarget,target2))
     }
 }

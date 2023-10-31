@@ -23,10 +23,10 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import dev.shiron.smallstride.model.MilestoneClass
 import dev.shiron.smallstride.model.TargetClass
-import dev.shiron.smallstride.targetObj
 import dev.shiron.smallstride.tmpMilestone
 import dev.shiron.smallstride.tmpTarget
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
+import dev.shiron.smallstride.view.dummyTarget
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId
@@ -218,8 +218,8 @@ private fun CalMilestoneContent(
 @Preview(showBackground = true)
 @Composable
 fun AllCalenderScreenPreview() {
-    val target2 = targetObj.copy(title = "マイルストーン2!!")
+    val target2 = dummyTarget.copy(title = "マイルストーン2!!")
     SmallStrideTheme {
-        AllCalenderScreen(rememberNavController(),listOf(targetObj, target2))
+        AllCalenderScreen(rememberNavController(),listOf(dummyTarget, target2))
     }
 }

@@ -29,33 +29,6 @@ import java.util.Date
 var tmpTarget: TargetClass? = null
 var tmpMilestone: MilestoneClass? = null
 
-val targetObj =
-    TargetClass(
-        title = "マイルストーン1",
-        startDay = Date(),
-        endDayAt = 30,
-        quickDayAt = 0,
-        fileName= "test.json",
-        milestones = listOf(
-            MilestoneClass(
-                title = "マイルストーン1-1",
-                hint = "マイルストーン1-1のヒント",
-                dayAt = 1
-            ),
-            MilestoneClass(
-                title = "マイルストーンのマイルストーン1-2",
-                hint = "マイルストーン1-2のヒント",
-                dayAt = 2
-            ),
-            MilestoneClass(
-                title = "mile 1-3",
-                hint = "マイルストーン1-3のヒント",
-                dayAt = 3
-            ),
-        )
-    )
-
-
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,7 +67,7 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("newtarget/result") {
                             if(tmpTarget != null) {
-                                TargetGenResultScreen(tmpTarget!!, navController)
+                                TargetGenResultScreen(navController, tmpTarget!!)
                             }else{
                                 tmpTarget = null
                                 tmpMilestone = null

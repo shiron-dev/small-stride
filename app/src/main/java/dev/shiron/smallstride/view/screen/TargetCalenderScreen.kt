@@ -30,10 +30,10 @@ import androidx.navigation.compose.rememberNavController
 import dev.shiron.smallstride.model.MilestoneClass
 import dev.shiron.smallstride.model.TargetClass
 import dev.shiron.smallstride.repository.saveTarget
-import dev.shiron.smallstride.targetObj
 import dev.shiron.smallstride.tmpMilestone
 import dev.shiron.smallstride.tmpTarget
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
+import dev.shiron.smallstride.view.dummyTarget
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -191,6 +191,6 @@ private fun CalMilestoneContent(startDay: Date, milestoneClass: MilestoneClass, 
 @Composable
 fun TargetCalenderScreenPreview() {
     SmallStrideTheme {
-        TargetCalenderScreen(rememberNavController(), targetObj)
+        TargetCalenderScreen(rememberNavController(), dummyTarget)
     }
 }

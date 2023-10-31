@@ -38,7 +38,6 @@ import java.util.Calendar
 @SuppressLint("SimpleDateFormat")
 @Composable
 fun MilestoneCalenderScreen(navController: NavController, target: TargetClass, milestone: MilestoneClass) {
-
     var expanded by remember { mutableStateOf(false) }
 
     Column(
@@ -52,7 +51,7 @@ fun MilestoneCalenderScreen(navController: NavController, target: TargetClass, m
             style = TextStyle(
                 fontSize = 24.sp,
                 fontWeight = FontWeight(400),
-                color = Color(0xFF000000),
+                color = Color(0xFF000000)
             )
         )
         Column(verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.Top)) {
@@ -62,7 +61,7 @@ fun MilestoneCalenderScreen(navController: NavController, target: TargetClass, m
                     style = TextStyle(
                         fontSize = 22.sp,
                         fontWeight = FontWeight(400),
-                        color = Color(0xFF000000),
+                        color = Color(0xFF000000)
                     )
                 )
                 val cal = Calendar.getInstance()
@@ -74,7 +73,7 @@ fun MilestoneCalenderScreen(navController: NavController, target: TargetClass, m
                     style = TextStyle(
                         fontSize = 22.sp,
                         fontWeight = FontWeight(400),
-                        color = Color(0xFF000000),
+                        color = Color(0xFF000000)
                     )
                 )
             }
@@ -83,7 +82,7 @@ fun MilestoneCalenderScreen(navController: NavController, target: TargetClass, m
                 style = TextStyle(
                     fontSize = 20.sp,
                     fontWeight = FontWeight(400),
-                    color = Color(0xFF000000),
+                    color = Color(0xFF000000)
                 )
             )
             Button(
@@ -97,17 +96,17 @@ fun MilestoneCalenderScreen(navController: NavController, target: TargetClass, m
                     ),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.White.copy(
-                        alpha = 0f,
-                    ),
-                ),
+                        alpha = 0f
+                    )
+                )
             ) {
                 Column {
                     Text(
-                        text = "Hintを${if(expanded) "閉じる" else "開く" }",
+                        text = "Hintを${if (expanded) "閉じる" else "開く" }",
                         style = TextStyle(
                             fontSize = 20.sp,
                             fontWeight = FontWeight(400),
-                            color = Color(0xFF000000),
+                            color = Color(0xFF000000)
                         )
                     )
                     if (expanded) {
@@ -116,7 +115,7 @@ fun MilestoneCalenderScreen(navController: NavController, target: TargetClass, m
                             style = TextStyle(
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight(400),
-                                color = Color(0xFF000000),
+                                color = Color(0xFF000000)
                             )
                         )
                     }

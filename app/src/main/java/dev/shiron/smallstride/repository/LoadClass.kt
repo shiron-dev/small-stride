@@ -10,13 +10,14 @@ import java.io.FileWriter
 import java.io.IOException
 
 fun loadFileList(context: Context): FileListClass {
-    return readFile(context, "fileList.json")?.let{Gson().fromJson(it, FileListClass::class.java)} ?: FileListClass(mutableListOf())
+    return readFile(context, "fileList.json")?.let { Gson().fromJson(it, FileListClass::class.java) } ?: FileListClass(mutableListOf())
 }
 
 fun saveTarget(context: Context, targetClass: TargetClass): TargetClass {
     val fileList = loadFileList(context)
-    if(!fileList.files.contains(targetClass.fileName))
+    if (!fileList.files.contains(targetClass.fileName)) {
         fileList.files.add(targetClass.fileName)
+    }
 
     saveFile(context, targetClass.fileName, Gson().toJson(targetClass))
 
@@ -25,7 +26,7 @@ fun saveTarget(context: Context, targetClass: TargetClass): TargetClass {
     return targetClass
 }
 
-fun loadAllTarget(context: Context):List<TargetClass> {
+fun loadAllTarget(context: Context): List<TargetClass> {
     val fileList = loadFileList(context)
     val ret = mutableListOf<TargetClass>()
     for (fileName in fileList.files) {
@@ -34,7 +35,7 @@ fun loadAllTarget(context: Context):List<TargetClass> {
     return ret
 }
 
-private fun readFile(context:Context, fileName:String):String?{
+private fun readFile(context: Context, fileName: String): String? {
     val file = File(context.filesDir, fileName)
     var text: String? = null
     try {
@@ -45,7 +46,7 @@ private fun readFile(context:Context, fileName:String):String?{
     return text
 }
 
-private fun saveFile(context:Context, fileName:String, text:String){
+private fun saveFile(context: Context, fileName: String, text: String) {
     val file = File(context.filesDir, fileName)
     try {
         FileWriter(file).use { writer -> writer.write(text) }

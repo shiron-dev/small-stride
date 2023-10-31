@@ -39,7 +39,7 @@ import java.util.Date
 fun TargetGenResultScreen(navController: NavController, target: TargetClass) {
     val scrollState = rememberScrollState()
     val context = LocalContext.current
-    
+
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -52,7 +52,7 @@ fun TargetGenResultScreen(navController: NavController, target: TargetClass) {
             style = TextStyle(
                 fontSize = 24.sp,
                 fontWeight = FontWeight(400),
-                color = Color(0xFF000000),
+                color = Color(0xFF000000)
             )
         )
 
@@ -110,7 +110,7 @@ fun TargetGenResultScreen(navController: NavController, target: TargetClass) {
 
 @SuppressLint("SimpleDateFormat")
 @Composable
-fun MilestoneContent(startDay:Date, milestoneClass: MilestoneClass) {
+fun MilestoneContent(startDay: Date, milestoneClass: MilestoneClass) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start),
         verticalAlignment = Alignment.Top,
@@ -136,7 +136,7 @@ fun MilestoneContent(startDay:Date, milestoneClass: MilestoneClass) {
             style = TextStyle(
                 fontSize = 20.sp,
                 fontWeight = FontWeight(400),
-                color = Color(0xFF000000),
+                color = Color(0xFF000000)
             )
         )
     }

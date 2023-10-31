@@ -40,7 +40,6 @@ import java.util.Date
 
 @Composable
 fun TargetCalenderScreen(navController: NavController, target: TargetClass) {
-
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -52,21 +51,21 @@ fun TargetCalenderScreen(navController: NavController, target: TargetClass) {
             style = TextStyle(
                 fontSize = 24.sp,
                 fontWeight = FontWeight(400),
-                color = Color(0xFF000000),
+                color = Color(0xFF000000)
             )
         )
-        MilestonesList(navController,target)
+        MilestonesList(navController, target)
     }
 }
 
 @Composable
-private fun MilestonesList(navController:NavController, target: TargetClass) {
+private fun MilestonesList(navController: NavController, target: TargetClass) {
     val nowMilestone = target.getNowMilestone()
     val context = LocalContext.current
-    Column (
+    Column(
         modifier = Modifier
             .padding(10.dp).verticalScroll(rememberScrollState())
-    ){
+    ) {
         for (mile in target.milestones) {
             CalMilestoneContent(target.startDay, mile, nowMilestone == mile) {
                 tmpTarget = target
@@ -75,10 +74,10 @@ private fun MilestonesList(navController:NavController, target: TargetClass) {
             }
         }
         Column {
-            Row(modifier=Modifier.fillMaxWidth()){
+            Row(modifier = Modifier.fillMaxWidth()) {
                 Button(
                     onClick = {
-                        if(target.getDayAt() == 1) return@Button
+                        if (target.getDayAt() == 1) return@Button
                         target.quickDayAt--
                         val cal = Calendar.getInstance()
                         cal.time = target.startDay
@@ -86,7 +85,7 @@ private fun MilestonesList(navController:NavController, target: TargetClass) {
                         target.startDay = cal.time
                         saveTarget(context, target)
                         navController.navigate("main")
-                        },
+                    },
                     colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(16.dp)
@@ -96,15 +95,15 @@ private fun MilestonesList(navController:NavController, target: TargetClass) {
                 Spacer(modifier = Modifier.width(10.dp))
                 Button(
                     onClick = {
-                        if(target.quickDayAt == target.endDayAt)return@Button
-                          target.quickDayAt++
+                        if (target.quickDayAt == target.endDayAt)return@Button
+                        target.quickDayAt++
                         val cal = Calendar.getInstance()
                         cal.time = target.startDay
                         cal.add(Calendar.DATE, -1)
                         target.startDay = cal.time
                         saveTarget(context, target)
                         navController.navigate("main")
-                      },
+                    },
                     colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(16.dp)
@@ -125,17 +124,16 @@ private fun MilestonesList(navController:NavController, target: TargetClass) {
 
 @SuppressLint("SimpleDateFormat")
 @Composable
-private fun CalMilestoneContent(startDay: Date, milestoneClass: MilestoneClass, isToday: Boolean =false, onClick: () -> Unit){
+private fun CalMilestoneContent(startDay: Date, milestoneClass: MilestoneClass, isToday: Boolean = false, onClick: () -> Unit) {
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.Black.copy(
-                alpha = 0f,
-            ),
+                alpha = 0f
+            )
         ),
         modifier = Modifier.fillMaxWidth()
     ) {
-
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -143,35 +141,39 @@ private fun CalMilestoneContent(startDay: Date, milestoneClass: MilestoneClass, 
                 .fillMaxWidth()
                 .border(
                     width = 1.dp,
-                    color = Color(if(isToday) 0xFFFF6D6D else 0xFF000000),
+                    color = Color(if (isToday) 0xFFFF6D6D else 0xFF000000),
                     shape = RoundedCornerShape(size = 4.dp)
                 )
                 .padding(start = 4.dp, top = 4.dp, end = 4.dp, bottom = 4.dp)
         ) {
             Column {
-                Text("Day${milestoneClass.dayAt}",
+                Text(
+                    "Day${milestoneClass.dayAt}",
                     style = TextStyle(
                         fontSize = 24.sp,
                         fontWeight = FontWeight(400),
-                        color = Color(0xFF022859),
-                    ))
+                        color = Color(0xFF022859)
+                    )
+                )
                 val calendar = Calendar.getInstance()
                 calendar.time = startDay
                 calendar.add(Calendar.DATE, milestoneClass.dayAt)
                 val sdf = SimpleDateFormat("MM/dd")
-                Text(sdf.format(calendar.time),
+                Text(
+                    sdf.format(calendar.time),
                     style = TextStyle(
                         fontSize = 24.sp,
                         fontWeight = FontWeight(400),
-                        color = Color(0xFF022859),
-                    ))
+                        color = Color(0xFF022859)
+                    )
+                )
             }
             Text(
                 text = milestoneClass.title,
                 style = TextStyle(
                     fontSize = 20.sp,
                     fontWeight = FontWeight(400),
-                    color = Color(0xFF000000),
+                    color = Color(0xFF000000)
                 )
             )
             Text(
@@ -179,7 +181,7 @@ private fun CalMilestoneContent(startDay: Date, milestoneClass: MilestoneClass, 
                 style = TextStyle(
                     fontSize = 24.sp,
                     fontWeight = FontWeight(400),
-                    color = Color(0xFF000000),
+                    color = Color(0xFF000000)
                 ),
                 modifier = Modifier.padding(4.dp)
             )

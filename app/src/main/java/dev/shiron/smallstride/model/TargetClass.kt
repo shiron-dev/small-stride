@@ -2,14 +2,14 @@ package dev.shiron.smallstride.model
 
 import java.util.Date
 
-data class TargetClass (
+data class TargetClass(
     var title: String,
     var startDay: Date,
     var milestones: List<MilestoneClass>,
     var endDayAt: Int,
     var quickDayAt: Int,
     var fileName: String
-){
+) {
     fun getDayAt(): Int {
         val now = Date()
         val diffTime = now.time - startDay.time

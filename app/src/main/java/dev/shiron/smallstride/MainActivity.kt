@@ -21,10 +21,9 @@ import dev.shiron.smallstride.view.screen.AllCalenderScreen
 import dev.shiron.smallstride.view.screen.HomeScreen
 import dev.shiron.smallstride.view.screen.MilestoneCalenderScreen
 import dev.shiron.smallstride.view.screen.NewTargetScreen
+import dev.shiron.smallstride.view.screen.NowLoadingScreen
 import dev.shiron.smallstride.view.screen.TargetCalenderScreen
 import dev.shiron.smallstride.view.screen.TargetGenResultScreen
-import dev.shiron.smallstride.view.screen.NowLoadingScreen
-import java.util.Date
 
 var tmpTarget: TargetClass? = null
 var tmpMilestone: MilestoneClass? = null
@@ -62,34 +61,34 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(
                             "nowloading"
-                        ){
+                        ) {
                             NowLoadingScreen()
                         }
                         composable("newtarget/result") {
-                            if(tmpTarget != null) {
+                            if (tmpTarget != null) {
                                 TargetGenResultScreen(navController, tmpTarget!!)
-                            }else{
+                            } else {
                                 tmpTarget = null
                                 tmpMilestone = null
                                 navController.navigate("main")
                             }
                         }
-                        composable("calender/all"){
+                        composable("calender/all") {
                             AllCalenderScreen(navController, loadAllTarget(LocalContext.current))
                         }
-                        composable("calender/target"){
-                            if(tmpTarget != null) {
+                        composable("calender/target") {
+                            if (tmpTarget != null) {
                                 TargetCalenderScreen(navController, tmpTarget!!)
-                            }else{
+                            } else {
                                 tmpTarget = null
                                 tmpMilestone = null
                                 navController.navigate("main")
                             }
                         }
-                        composable("calender/milestone"){
-                            if(tmpMilestone != null && tmpTarget != null) {
-                                MilestoneCalenderScreen(navController, tmpTarget!!,tmpMilestone!!)
-                            }else{
+                        composable("calender/milestone") {
+                            if (tmpMilestone != null && tmpTarget != null) {
+                                MilestoneCalenderScreen(navController, tmpTarget!!, tmpMilestone!!)
+                            } else {
                                 tmpTarget = null
                                 tmpMilestone = null
                                 navController.navigate("main")

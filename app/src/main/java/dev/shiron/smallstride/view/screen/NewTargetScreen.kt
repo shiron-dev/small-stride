@@ -41,8 +41,8 @@ import java.util.Date
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun NewTargetScreen(navController: NavController) {
-    var selectedNum by remember { mutableStateOf(tmpTarget?.endDayAt ?:30) }
-    val titleInput = remember { mutableStateOf(tmpTarget?.title ?:"") }
+    var selectedNum by remember { mutableStateOf(tmpTarget?.endDayAt ?: 30) }
+    val titleInput = remember { mutableStateOf(tmpTarget?.title ?: "") }
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -54,7 +54,7 @@ fun NewTargetScreen(navController: NavController) {
             style = TextStyle(
                 fontSize = 24.sp,
                 fontWeight = FontWeight(400),
-                color = Color(0xFF000000),
+                color = Color(0xFF000000)
             )
         )
         Row(
@@ -64,7 +64,7 @@ fun NewTargetScreen(navController: NavController) {
                 .height(50.dp)
                 .padding(start = 0.dp, top = 0.dp, end = 10.dp, bottom = 0.dp)
         ) {
-            DayDropDownMenu(selectedNum){
+            DayDropDownMenu(selectedNum) {
                 selectedNum = it
             }
             Row(
@@ -93,14 +93,14 @@ fun NewTargetScreen(navController: NavController) {
                             }
                             innerTextField()
                         }
-                    },
+                    }
                 )
             }
         }
 
         Button(
             onClick = {
-                if(titleInput.value.isEmpty())return@Button
+                if (titleInput.value.isEmpty())return@Button
                 val reqTarget = ReqTargetClass(
                     title = titleInput.value,
                     startDay = Date(),
@@ -109,9 +109,9 @@ fun NewTargetScreen(navController: NavController) {
                 )
                 callApi(reqTarget, onFailure = {
                     Log.d("callApi", it.toString())
-                }){
+                }) {
                     tmpTarget = it
-                    if(it == null) {
+                    if (it == null) {
                         navController.navigate("newtarget/new")
                         return@callApi
                     }
@@ -119,7 +119,7 @@ fun NewTargetScreen(navController: NavController) {
                 }
 
                 navController.navigate("nowloading")
-              },
+            },
             colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
             modifier = Modifier
                 .fillMaxWidth()
@@ -130,10 +130,9 @@ fun NewTargetScreen(navController: NavController) {
     }
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DayDropDownMenu(selectedNum: Int, onClick:(item: Int) -> Unit) {
+fun DayDropDownMenu(selectedNum: Int, onClick: (item: Int) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     val items = listOf(30, 60, 90)
 

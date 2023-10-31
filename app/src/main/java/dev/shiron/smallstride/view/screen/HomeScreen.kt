@@ -34,9 +34,8 @@ import dev.shiron.smallstride.tmpTarget
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
 import dev.shiron.smallstride.view.dummyTarget
 
-
 @Composable
-fun HomeScreen(navController: NavController, targets: List<TargetClass>){
+fun HomeScreen(navController: NavController, targets: List<TargetClass>) {
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -45,7 +44,7 @@ fun HomeScreen(navController: NavController, targets: List<TargetClass>){
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.Top),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Child views.
             NewTargetButton {
@@ -57,7 +56,7 @@ fun HomeScreen(navController: NavController, targets: List<TargetClass>){
         }
         Column(
             verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.Top),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Button(
                 onClick = { navController.navigate("calender/all") },
@@ -70,7 +69,7 @@ fun HomeScreen(navController: NavController, targets: List<TargetClass>){
                         fontSize = 24.sp,
                         fontWeight = FontWeight(500),
                         color = Color(0xFFFFFFFF),
-                        textAlign = TextAlign.Center,
+                        textAlign = TextAlign.Center
                     )
                 )
             }
@@ -98,7 +97,7 @@ fun HomeScreen(navController: NavController, targets: List<TargetClass>){
 }
 
 @Composable
-fun MilestoneList(milestoneList: List<TargetClass>, navController: NavController){
+fun MilestoneList(milestoneList: List<TargetClass>, navController: NavController) {
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
         horizontalAlignment = Alignment.Start,
@@ -106,8 +105,8 @@ fun MilestoneList(milestoneList: List<TargetClass>, navController: NavController
             .verticalScroll(rememberScrollState())
     ) {
         for (milestone in milestoneList) {
-            if(milestone.getDayAt() > milestone.endDayAt) continue
-            Milestone(milestone = milestone){
+            if (milestone.getDayAt() > milestone.endDayAt) continue
+            Milestone(milestone = milestone) {
                 tmpTarget = milestone
                 navController.navigate("calender/target")
             }
@@ -121,9 +120,9 @@ fun Milestone(milestone: TargetClass, onClick: () -> Unit) {
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.Black.copy(
-                alpha = 0f,
-            ),
-        ),
+                alpha = 0f
+            )
+        )
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -152,14 +151,14 @@ fun Milestone(milestone: TargetClass, onClick: () -> Unit) {
                 }
                 Column(
                     verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
-                    horizontalAlignment = Alignment.Start,
+                    horizontalAlignment = Alignment.Start
                 ) {
                     Text(
                         text = "${milestone.endDayAt}日で${milestone.title}",
                         style = TextStyle(
                             fontSize = 16.sp,
                             fontWeight = FontWeight(400),
-                            color = Color(0xFF022859),
+                            color = Color(0xFF022859)
                         )
                     )
                     Row(
@@ -172,7 +171,7 @@ fun Milestone(milestone: TargetClass, onClick: () -> Unit) {
                             style = TextStyle(
                                 fontSize = 24.sp,
                                 fontWeight = FontWeight(400),
-                                color = Color(0xFF022859),
+                                color = Color(0xFF022859)
                             )
                         )
                     }
@@ -184,7 +183,7 @@ fun Milestone(milestone: TargetClass, onClick: () -> Unit) {
                     fontSize = 32.sp,
                     fontWeight = FontWeight(400),
                     color = Color(0xFF022859),
-                    textAlign = TextAlign.Center,
+                    textAlign = TextAlign.Center
                 ),
                 modifier = Modifier.padding(4.dp)
             )
@@ -198,9 +197,9 @@ fun NewTargetButton(onClick: () -> Unit) {
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.Black.copy(
-                alpha = 0f,
-            ),
-        ),
+                alpha = 0f
+            )
+        )
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.Top),
@@ -220,7 +219,7 @@ fun NewTargetButton(onClick: () -> Unit) {
                 style = TextStyle(
                     fontSize = 16.sp,
                     fontWeight = FontWeight(400),
-                    color = Color(0xFF7B7B7B),
+                    color = Color(0xFF7B7B7B)
                 )
             )
         }
@@ -232,6 +231,6 @@ fun NewTargetButton(onClick: () -> Unit) {
 fun HomePreview() {
     val target2 = dummyTarget.copy(title = "マイルストーン2!!")
     SmallStrideTheme {
-        HomeScreen(navController = rememberNavController(),listOf(dummyTarget,target2))
+        HomeScreen(navController = rememberNavController(), listOf(dummyTarget, target2))
     }
 }

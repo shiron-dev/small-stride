@@ -35,8 +35,7 @@ import java.util.Date
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AllCalenderScreen(navController: NavController, targets:List<TargetClass>) {
-
+fun AllCalenderScreen(navController: NavController, targets: List<TargetClass>) {
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -48,10 +47,10 @@ fun AllCalenderScreen(navController: NavController, targets:List<TargetClass>) {
             style = TextStyle(
                 fontSize = 24.sp,
                 fontWeight = FontWeight(400),
-                color = Color(0xFF000000),
+                color = Color(0xFF000000)
             )
         )
-        MilestonesList(navController,targets)
+        MilestonesList(navController, targets)
         Button(
             onClick = { navController.navigate("home") },
             colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
@@ -76,32 +75,32 @@ private fun MilestonesList(navController: NavController, targets: List<TargetCla
     }
     milestones.sortBy { it.first.time }
 
-    Column (
+    Column(
         modifier = Modifier
             .padding(10.dp).verticalScroll(rememberScrollState())
-    ){
+    ) {
         var lastDate = Date(0)
         var miles = mutableListOf<Pair<TargetClass, MilestoneClass>>()
         for (milestone in milestones) {
             if (milestone.first != lastDate) {
                 if (miles.isNotEmpty()) {
-                    MilestoneList(navController,date = lastDate, miles = miles)
+                    MilestoneList(navController, date = lastDate, miles = miles)
                 }
                 miles = mutableListOf()
                 lastDate = milestone.first
             }
             miles.add(milestone.second)
         }
-        MilestoneList(navController,date = lastDate, miles = miles)
+        MilestoneList(navController, date = lastDate, miles = miles)
     }
 }
 
 @SuppressLint("SimpleDateFormat")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-private fun MilestoneList(navController: NavController, date:Date, miles:List<Pair<TargetClass, MilestoneClass>>) {
-    var modifier =Modifier.padding(10.dp)
-    if(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate() == LocalDate.now()){
+private fun MilestoneList(navController: NavController, date: Date, miles: List<Pair<TargetClass, MilestoneClass>>) {
+    var modifier = Modifier.padding(10.dp)
+    if (date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate() == LocalDate.now()) {
         modifier = modifier
             .border(
                 width = 1.dp,
@@ -109,9 +108,9 @@ private fun MilestoneList(navController: NavController, date:Date, miles:List<Pa
                 shape = RoundedCornerShape(size = 8.dp)
             )
     }
-    Row (
+    Row(
         modifier = modifier
-    ){
+    ) {
         val sdf = SimpleDateFormat("MM/dd")
         Text(
             text = sdf.format(date),
@@ -119,12 +118,12 @@ private fun MilestoneList(navController: NavController, date:Date, miles:List<Pa
             style = TextStyle(
                 fontSize = 24.sp,
                 fontWeight = FontWeight(400),
-                color = Color(0xFF000000),
+                color = Color(0xFF000000)
             )
         )
-        Column (modifier = Modifier.fillMaxWidth()){
+        Column(modifier = Modifier.fillMaxWidth()) {
             for (mile in miles) {
-                CalMilestoneContent(mile.first, mile.second){
+                CalMilestoneContent(mile.first, mile.second) {
                     tmpTarget = mile.first
                     tmpMilestone = mile.second
                     navController.navigate("calender/milestone")
@@ -140,13 +139,12 @@ private fun CalMilestoneContent(
     milestone: MilestoneClass,
     onClick: () -> Unit
 ) {
-
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.Black.copy(
-                alpha = 0f,
-            ),
+                alpha = 0f
+            )
         ),
         modifier = Modifier.fillMaxSize()
     ) {
@@ -168,20 +166,20 @@ private fun CalMilestoneContent(
                     CircularProgressIndicator(
                         progress = milestone.dayAt.toFloat() / targetClass.endDayAt.toFloat(),
                         color = Color(0xFF8395F9),
-                        modifier = Modifier.padding(top=4.dp)
+                        modifier = Modifier.padding(top = 4.dp)
                     )
                     Text("Day${milestone.dayAt}", color = Color(0xFF022859))
                 }
                 Column(
                     verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
-                    horizontalAlignment = Alignment.Start,
+                    horizontalAlignment = Alignment.Start
                 ) {
                     Text(
                         text = milestone.title,
                         style = TextStyle(
                             fontSize = 12.sp,
                             fontWeight = FontWeight(400),
-                            color = Color(0xFF022859),
+                            color = Color(0xFF022859)
                         )
                     )
                     Row(
@@ -194,7 +192,7 @@ private fun CalMilestoneContent(
                             style = TextStyle(
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight(400),
-                                color = Color(0xFF022859),
+                                color = Color(0xFF022859)
                             )
                         )
                     }
@@ -220,6 +218,6 @@ private fun CalMilestoneContent(
 fun AllCalenderScreenPreview() {
     val target2 = dummyTarget.copy(title = "マイルストーン2!!")
     SmallStrideTheme {
-        AllCalenderScreen(rememberNavController(),listOf(dummyTarget, target2))
+        AllCalenderScreen(rememberNavController(), listOf(dummyTarget, target2))
     }
 }

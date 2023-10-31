@@ -1,6 +1,8 @@
-package dev.shiron.smallstride.domain
+package dev.shiron.smallstride.repository
 
 import com.google.gson.GsonBuilder
+import dev.shiron.smallstride.model.ReqTargetClass
+import dev.shiron.smallstride.model.TargetClass
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -10,21 +12,19 @@ import retrofit2.http.POST
 import java.util.concurrent.TimeUnit
 
 const val API_ORIGIN = "https://pck.shiron.dev"
-const val NEW_TARGET_URL = "${API_ORIGIN}/target/"
+const val NEW_TARGET_URL = "$API_ORIGIN/target/"
 
-// Retrofitのインターフェースを定義します
 interface ApiInterface {
     @POST("new")
     fun getTargetData(@Body request: ReqTargetClass): Call<TargetClass>
 }
 
 private val okHttpClient = OkHttpClient.Builder()
-    .connectTimeout(60, TimeUnit.MINUTES) // 接続のタイムアウトを60秒に設定
-    .readTimeout(60, TimeUnit.MINUTES) // 読み取りのタイムアウトを60秒に設定
-    .writeTimeout(60, TimeUnit.MINUTES) // 書き込みのタイムアウトを60秒に設定
+    .connectTimeout(60, TimeUnit.MINUTES)
+    .readTimeout(60, TimeUnit.MINUTES)
+    .writeTimeout(60, TimeUnit.MINUTES)
     .build()
 
-// Retrofitクライアントを初期化します
 private val retrofit = Retrofit.Builder()
     .baseUrl(NEW_TARGET_URL)
     .addConverterFactory(GsonConverterFactory.create(
@@ -33,8 +33,7 @@ private val retrofit = Retrofit.Builder()
     .client(okHttpClient)
     .build()
 
-// APIを呼び出す関数を定義します
-fun callApi(reqTargetClass: ReqTargetClass, onFailure: (Throwable) -> Unit = {},onResponse: (TargetClass?) -> Unit) {
+fun callApi(reqTargetClass: ReqTargetClass, onFailure: (Throwable) -> Unit = {}, onResponse: (TargetClass?) -> Unit) {
     val apiInterface = retrofit.create(ApiInterface::class.java)
     val call = apiInterface.getTargetData(reqTargetClass)
 

@@ -1,4 +1,4 @@
-package dev.shiron.smallstride.domain
+package dev.shiron.smallstride.model
 
 import java.util.Date
 
@@ -20,7 +20,7 @@ data class TargetClass (
     fun getNowMilestone(): MilestoneClass? {
         val dayAt = getDayAt()
         var min = Int.MAX_VALUE
-        var ret:MilestoneClass? = null
+        var ret: MilestoneClass? = null
         for (milestone in milestones) {
             if (dayAt >= milestone.dayAt && dayAt - milestone.dayAt < min) {
                 min = dayAt - milestone.dayAt
@@ -30,12 +30,6 @@ data class TargetClass (
         return ret
     }
 }
-
-data class MilestoneClass (
-    var title: String,
-    var hint: String,
-    var dayAt: Int
-)
 
 data class ReqTargetClass(
     var title: String,

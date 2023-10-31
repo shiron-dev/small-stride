@@ -1,4 +1,4 @@
-package dev.shiron.smallstride
+package dev.shiron.smallstride.view.screen
 
 import android.annotation.SuppressLint
 import android.os.Build
@@ -21,8 +21,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import dev.shiron.smallstride.domain.MilestoneClass
-import dev.shiron.smallstride.domain.TargetClass
+import dev.shiron.smallstride.model.MilestoneClass
+import dev.shiron.smallstride.model.TargetClass
+import dev.shiron.smallstride.targetObj
+import dev.shiron.smallstride.tmpMilestone
+import dev.shiron.smallstride.tmpTarget
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -78,7 +81,7 @@ private fun MilestonesList(navController: NavController, targets: List<TargetCla
             .padding(10.dp).verticalScroll(rememberScrollState())
     ){
         var lastDate = Date(0)
-        var miles = mutableListOf<Pair<TargetClass,MilestoneClass>>()
+        var miles = mutableListOf<Pair<TargetClass, MilestoneClass>>()
         for (milestone in milestones) {
             if (milestone.first != lastDate) {
                 if (miles.isNotEmpty()) {
@@ -96,7 +99,7 @@ private fun MilestonesList(navController: NavController, targets: List<TargetCla
 @SuppressLint("SimpleDateFormat")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-private fun MilestoneList(navController: NavController, date:Date, miles:List<Pair<TargetClass,MilestoneClass>>) {
+private fun MilestoneList(navController: NavController, date:Date, miles:List<Pair<TargetClass, MilestoneClass>>) {
     var modifier =Modifier.padding(10.dp)
     if(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate() == LocalDate.now()){
         modifier = modifier

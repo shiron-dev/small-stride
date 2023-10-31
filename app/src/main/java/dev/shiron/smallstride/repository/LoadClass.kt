@@ -1,19 +1,19 @@
-package dev.shiron.smallstride
+package dev.shiron.smallstride.repository
 
 import android.content.Context
 import com.google.gson.Gson
-import dev.shiron.smallstride.domain.TargetClass
+import dev.shiron.smallstride.model.TargetClass
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 import java.io.IOException
 
-fun loadFileList(context: Context):FileListClass {
+fun loadFileList(context: Context): FileListClass {
     return readFile(context, "fileList.json")?.let{Gson().fromJson(it, FileListClass::class.java)} ?: FileListClass(mutableListOf())
 }
 
-fun saveTarget(context: Context, targetClass: TargetClass):TargetClass {
+fun saveTarget(context: Context, targetClass: TargetClass): TargetClass {
     val fileList = loadFileList(context)
     if(!fileList.files.contains(targetClass.fileName))
         fileList.files.add(targetClass.fileName)

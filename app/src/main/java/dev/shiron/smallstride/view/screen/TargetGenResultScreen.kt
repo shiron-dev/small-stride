@@ -1,4 +1,4 @@
-package dev.shiron.smallstride
+package dev.shiron.smallstride.view.screen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.border
@@ -25,8 +25,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import dev.shiron.smallstride.domain.MilestoneClass
-import dev.shiron.smallstride.domain.TargetClass
+import dev.shiron.smallstride.model.MilestoneClass
+import dev.shiron.smallstride.model.TargetClass
+import dev.shiron.smallstride.repository.saveTarget
+import dev.shiron.smallstride.targetObj
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -34,7 +36,7 @@ import java.util.Date
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun TargetGenResultScreen(target:TargetClass, navController: NavController) {
+fun TargetGenResultScreen(target: TargetClass, navController: NavController) {
     val scrollState = rememberScrollState()
     val context = LocalContext.current
     

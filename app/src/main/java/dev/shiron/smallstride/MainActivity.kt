@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
@@ -44,58 +45,64 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             SmallStrideTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = "main") {
-                        composable("main") {
-                            HomeScreen(navController = navController, loadAllTarget(LocalContext.current))
-                        }
-                        composable(
-                            "newtarget/new"
-                        ) {
-                            NewTargetScreen(navController = navController)
-                        }
-                        composable(
-                            "nowloading"
-                        ) {
-                            NowLoadingScreen()
-                        }
-                        composable("newtarget/result") {
-                            if (tmpTarget != null) {
-                                TargetGenResultScreen(navController, tmpTarget!!)
-                            } else {
-                                tmpTarget = null
-                                tmpMilestone = null
-                                navController.navigate("main")
-                            }
-                        }
-                        composable("calender/all") {
-                            AllCalenderScreen(navController, loadAllTarget(LocalContext.current))
-                        }
-                        composable("calender/target") {
-                            if (tmpTarget != null) {
-                                TargetCalenderScreen(navController, tmpTarget!!)
-                            } else {
-                                tmpTarget = null
-                                tmpMilestone = null
-                                navController.navigate("main")
-                            }
-                        }
-                        composable("calender/milestone") {
-                            if (tmpMilestone != null && tmpTarget != null) {
-                                MilestoneCalenderScreen(navController, tmpTarget!!, tmpMilestone!!)
-                            } else {
-                                tmpTarget = null
-                                tmpMilestone = null
-                                navController.navigate("main")
-                            }
-                        }
-                    }
+                    Routes()
                 }
+            }
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun Routes() {
+    val navController = rememberNavController()
+
+    NavHost(navController = navController, startDestination = "main") {
+        composable("main") {
+            HomeScreen(navController = navController, loadAllTarget(LocalContext.current))
+        }
+        composable(
+            "newtarget/new"
+        ) {
+            NewTargetScreen(navController = navController)
+        }
+        composable(
+            "nowloading"
+        ) {
+            NowLoadingScreen()
+        }
+        composable("newtarget/result") {
+            if (tmpTarget != null) {
+                TargetGenResultScreen(navController, tmpTarget!!)
+            } else {
+                tmpTarget = null
+                tmpMilestone = null
+                navController.navigate("main")
+            }
+        }
+        composable("calender/all") {
+            AllCalenderScreen(navController, loadAllTarget(LocalContext.current))
+        }
+        composable("calender/target") {
+            if (tmpTarget != null) {
+                TargetCalenderScreen(navController, tmpTarget!!)
+            } else {
+                tmpTarget = null
+                tmpMilestone = null
+                navController.navigate("main")
+            }
+        }
+        composable("calender/milestone") {
+            if (tmpMilestone != null && tmpTarget != null) {
+                MilestoneCalenderScreen(navController, tmpTarget!!, tmpMilestone!!)
+            } else {
+                tmpTarget = null
+                tmpMilestone = null
+                navController.navigate("main")
             }
         }
     }

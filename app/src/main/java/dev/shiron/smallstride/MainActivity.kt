@@ -11,17 +11,21 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import dev.shiron.smallstride.model.MilestoneClass
 import dev.shiron.smallstride.model.TargetClass
 import dev.shiron.smallstride.repository.loadAllTarget
+import dev.shiron.smallstride.repository.readWip
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
+import dev.shiron.smallstride.view.ScreenEnum
 import dev.shiron.smallstride.view.screen.AllCalenderScreen
 import dev.shiron.smallstride.view.screen.HomeScreen
 import dev.shiron.smallstride.view.screen.MilestoneCalenderScreen
-import dev.shiron.smallstride.view.screen.NewTargetScreen
+import dev.shiron.smallstride.view.screen.TargetCreateScreen
 import dev.shiron.smallstride.view.screen.NowLoadingScreen
 import dev.shiron.smallstride.view.screen.TargetCalenderScreen
 import dev.shiron.smallstride.view.screen.TargetGenResultScreen
@@ -61,48 +65,53 @@ class MainActivity : ComponentActivity() {
 fun Routes() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "main") {
-        composable("main") {
+    NavHost(navController = navController, startDestination = ScreenEnum.HOME.route) {
+        composable(ScreenEnum.HOME.route) {
             HomeScreen(navController = navController, loadAllTarget(LocalContext.current))
         }
         composable(
-            "newtarget/new"
+            ScreenEnum.TARGET_CREATE.route
         ) {
-            NewTargetScreen(navController = navController)
+            TargetCreateScreen(navController = navController)
         }
         composable(
-            "nowloading"
+            ScreenEnum.NOW_LOADING.route
         ) {
             NowLoadingScreen()
         }
-        composable("newtarget/result") {
-            if (tmpTarget != null) {
-                TargetGenResultScreen(navController, tmpTarget!!)
-            } else {
-                tmpTarget = null
-                tmpMilestone = null
-                navController.navigate("main")
+        composable(
+            route = ScreenEnum.TARGET_RESULT.route,
+            arguments = listOf(navArgument("target") { type = NavType.StringType })
+        ) {
+            val targetID = it.arguments?.getString("target") ?: run {
+                navController.navigate(ScreenEnum.TARGET_CREATE.route)
+                return@composable
             }
+            val target = readWip(targetID) ?: run {
+                navController.navigate(ScreenEnum.TARGET_CREATE.route)
+                return@composable
+            }
+            TargetGenResultScreen(navController, target)
         }
-        composable("calender/all") {
+        composable(ScreenEnum.ALL_CALENDER.route) {
             AllCalenderScreen(navController, loadAllTarget(LocalContext.current))
         }
-        composable("calender/target") {
+        composable(ScreenEnum.TARGET_CALENDER.route) {
             if (tmpTarget != null) {
                 TargetCalenderScreen(navController, tmpTarget!!)
             } else {
                 tmpTarget = null
                 tmpMilestone = null
-                navController.navigate("main")
+                navController.navigate(ScreenEnum.HOME.route)
             }
         }
-        composable("calender/milestone") {
+        composable(ScreenEnum.MILESTONE_CALENDER.route) {
             if (tmpMilestone != null && tmpTarget != null) {
                 MilestoneCalenderScreen(navController, tmpTarget!!, tmpMilestone!!)
             } else {
                 tmpTarget = null
                 tmpMilestone = null
-                navController.navigate("main")
+                navController.navigate(ScreenEnum.HOME.route)
             }
         }
     }

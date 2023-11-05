@@ -29,6 +29,7 @@ import dev.shiron.smallstride.model.MilestoneClass
 import dev.shiron.smallstride.model.TargetClass
 import dev.shiron.smallstride.repository.saveTarget
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
+import dev.shiron.smallstride.view.ScreenEnum
 import dev.shiron.smallstride.view.dummyTarget
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -71,7 +72,7 @@ fun TargetGenResultScreen(navController: NavController, target: TargetClass) {
                     .padding(10.dp)
             ) {
                 Button(
-                    onClick = { navController.navigate("newtarget/new") },
+                    onClick = { navController.run { navigate(ScreenEnum.TARGET_CREATE.route) } },
                     colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -81,7 +82,7 @@ fun TargetGenResultScreen(navController: NavController, target: TargetClass) {
                 Button(
                     onClick = {
                         saveTarget(context, target)
-                        navController.navigate("main")
+                        navController.navigate(ScreenEnum.HOME.route)
                     },
                     colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
                     modifier = Modifier
@@ -95,7 +96,7 @@ fun TargetGenResultScreen(navController: NavController, target: TargetClass) {
                     onClick = {
                         saveTarget(context, target)
                         uriHandler.openUri("https://pck.shiron.dev/calender?target=${target.fileName}")
-                        navController.navigate("main")
+                        navController.navigate(ScreenEnum.HOME.route)
                     },
                     colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
                     modifier = Modifier

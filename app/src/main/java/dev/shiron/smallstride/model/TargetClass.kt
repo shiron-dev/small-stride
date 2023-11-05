@@ -1,5 +1,6 @@
 package dev.shiron.smallstride.model
 
+import java.io.Serializable
 import java.util.Date
 
 data class TargetClass(
@@ -9,7 +10,7 @@ data class TargetClass(
     var endDayAt: Int,
     var quickDayAt: Int,
     var fileName: String
-) {
+) : Serializable {
     fun getDayAt(): Int {
         val now = Date()
         val diffTime = now.time - startDay.time

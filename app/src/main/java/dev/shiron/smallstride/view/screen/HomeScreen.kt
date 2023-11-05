@@ -32,6 +32,7 @@ import dev.shiron.smallstride.model.TargetClass
 import dev.shiron.smallstride.tmpMilestone
 import dev.shiron.smallstride.tmpTarget
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
+import dev.shiron.smallstride.view.ScreenEnum
 import dev.shiron.smallstride.view.dummyTarget
 
 @Composable
@@ -50,7 +51,7 @@ fun HomeScreen(navController: NavController, targets: List<TargetClass>) {
             NewTargetButton {
                 tmpTarget = null
                 tmpMilestone = null
-                navController.navigate("newtarget/new")
+                navController.navigate(ScreenEnum.TARGET_CREATE.route)
             }
             MilestoneList(targets, navController)
         }

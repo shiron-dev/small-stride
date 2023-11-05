@@ -33,6 +33,7 @@ import dev.shiron.smallstride.repository.saveTarget
 import dev.shiron.smallstride.tmpMilestone
 import dev.shiron.smallstride.tmpTarget
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
+import dev.shiron.smallstride.view.ScreenEnum
 import dev.shiron.smallstride.view.dummyTarget
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -84,7 +85,7 @@ private fun MilestonesList(navController: NavController, target: TargetClass) {
                         cal.add(Calendar.DATE, 1)
                         target.startDay = cal.time
                         saveTarget(context, target)
-                        navController.navigate("main")
+                        navController.navigate(ScreenEnum.HOME.route)
                     },
                     colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
                     modifier = Modifier.weight(1f),
@@ -102,7 +103,7 @@ private fun MilestonesList(navController: NavController, target: TargetClass) {
                         cal.add(Calendar.DATE, -1)
                         target.startDay = cal.time
                         saveTarget(context, target)
-                        navController.navigate("main")
+                        navController.navigate(ScreenEnum.HOME.route)
                     },
                     colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
                     modifier = Modifier.weight(1f),

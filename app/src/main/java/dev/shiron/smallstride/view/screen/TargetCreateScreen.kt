@@ -34,13 +34,15 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import dev.shiron.smallstride.model.ReqTargetClass
 import dev.shiron.smallstride.repository.callApi
+import dev.shiron.smallstride.repository.saveWip
 import dev.shiron.smallstride.tmpTarget
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
+import dev.shiron.smallstride.view.ScreenEnum
 import java.util.Date
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun NewTargetScreen(navController: NavController) {
+fun TargetCreateScreen(navController: NavController) {
     var selectedNum by remember { mutableStateOf(tmpTarget?.endDayAt ?: 30) }
     val titleInput = remember { mutableStateOf(tmpTarget?.title ?: "") }
 
@@ -110,12 +112,18 @@ fun NewTargetScreen(navController: NavController) {
                 callApi(reqTarget, onFailure = {
                     Log.d("callApi", it.toString())
                 }) {
-                    tmpTarget = it
                     if (it == null) {
-                        navController.navigate("newtarget/new")
+                        navController.navigate(ScreenEnum.TARGET_CREATE.route)
                         return@callApi
                     }
-                    navController.navigate("newtarget/result")
+
+                    saveWip(it)
+                    navController.navigate("target/result/${it.fileName}"){
+                        popUpTo(ScreenEnum.NOW_LOADING.route) {
+                            // 指定の目的地（screen2）も含む
+                            inclusive = true
+                        }
+                    }
                 }
 
                 navController.navigate("nowloading")
@@ -186,6 +194,6 @@ fun DayDropDownMenu(selectedNum: Int, onClick: (item: Int) -> Unit) {
 @Composable
 fun NewTargetScreenPreview() {
     SmallStrideTheme {
-        NewTargetScreen(rememberNavController())
+        TargetCreateScreen(rememberNavController())
     }
 }

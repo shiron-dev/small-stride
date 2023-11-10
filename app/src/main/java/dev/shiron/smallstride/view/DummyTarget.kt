@@ -7,6 +7,7 @@ import java.util.Date
 val dummyTarget =
     TargetClass(
         title = "マイルストーン1",
+        input = "マイルストーン",
         startDay = Date(),
         endDayAt = 30,
         quickDayAt = 0,

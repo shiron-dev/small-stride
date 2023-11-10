@@ -5,6 +5,7 @@ import java.util.Date
 
 data class TargetClass(
     var title: String,
+    var input: String,
     var startDay: Date,
     var milestones: List<MilestoneClass>,
     var endDayAt: Int,

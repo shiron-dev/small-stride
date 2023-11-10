@@ -72,7 +72,7 @@ fun TargetGenResultScreen(navController: NavController, target: TargetClass) {
                     .padding(10.dp)
             ) {
                 Button(
-                    onClick = { navController.run { navigate(ScreenEnum.TARGET_CREATE.route) } },
+                    onClick = { navController.run { navigate("target/create/${target.input}") } },
                     colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
                     modifier = Modifier
                         .fillMaxWidth()

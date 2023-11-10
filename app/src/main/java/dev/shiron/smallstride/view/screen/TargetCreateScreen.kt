@@ -42,9 +42,9 @@ import java.util.Date
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun TargetCreateScreen(navController: NavController) {
+fun TargetCreateScreen(navController: NavController, inputStr: String? = null) {
     var selectedNum by remember { mutableStateOf(tmpTarget?.endDayAt ?: 30) }
-    val titleInput = remember { mutableStateOf(tmpTarget?.title ?: "") }
+    val titleInput = remember { mutableStateOf(inputStr ?: "") }
 
     Column(
         modifier = Modifier.fillMaxWidth(),

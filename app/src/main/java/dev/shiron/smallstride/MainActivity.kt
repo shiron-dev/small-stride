@@ -75,6 +75,19 @@ fun Routes() {
             TargetCreateScreen(navController = navController)
         }
         composable(
+            ScreenEnum.TARGET_CREATE.route,
+            arguments = listOf(navArgument("inputStr") { type = NavType.StringType })
+        ) {
+            val inputStr = it.arguments?.getString("inputStr") ?: run {
+                TargetCreateScreen(navController = navController)
+                return@composable
+            }
+            if(inputStr == "{inputStr}")
+                TargetCreateScreen(navController = navController)
+            else
+                TargetCreateScreen(navController = navController, inputStr = inputStr)
+        }
+        composable(
             ScreenEnum.NOW_LOADING.route
         ) {
             NowLoadingScreen()

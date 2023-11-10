@@ -129,7 +129,7 @@ fun TargetCreateScreen(navController: NavController, inputStr: String? = null, e
                     }
 
                     saveWip(it)
-                    navController.navigate("target/result/${it.fileName}"){
+                    navController.navigate("target/result/${it.fileName}") {
                         popUpTo(ScreenEnum.NOW_LOADING.route) {
                             // 指定の目的地（screen2）も含む
                             inclusive = true

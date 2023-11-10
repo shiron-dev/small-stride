@@ -65,7 +65,7 @@ private fun MilestonesList(navController: NavController, target: TargetClass) {
         modifier = Modifier
             .padding(10.dp).verticalScroll(rememberScrollState())
     ) {
-        for ((index,mile) in target.milestones.withIndex()) {
+        for ((index, mile) in target.milestones.withIndex()) {
             CalMilestoneContent(target.startDay, mile, nowMilestone == mile) {
                 navController.navigate("calender/milestone/${target.fileName}/$index")
             }

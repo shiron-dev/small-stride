@@ -14,8 +14,7 @@ import dev.shiron.smallstride.ui.theme.SmallStrideTheme
 
 @Composable
 fun NowLoadingScreen() {
-
-    BackHandler(enabled = true){ }
+    BackHandler(enabled = true) { }
 
     Column(
         modifier = Modifier.fillMaxSize(),

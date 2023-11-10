@@ -65,7 +65,7 @@ fun Routes() {
         composable(ScreenEnum.HOME.route) {
             HomeScreen(navController = navController, loadAllTarget(LocalContext.current))
         }
-        composable(ScreenEnum.TARGET_CREATE.route){
+        composable(ScreenEnum.TARGET_CREATE.route) {
             TargetCreateScreen(navController = navController)
         }
         composable(
@@ -115,7 +115,7 @@ fun Routes() {
                 navController.navigate(ScreenEnum.HOME.route)
                 return@composable
             }
-            val target = loadTarget(LocalContext.current, targetID)?:run{
+            val target = loadTarget(LocalContext.current, targetID) ?: run {
                 navController.navigate(ScreenEnum.HOME.route)
                 return@composable
             }
@@ -126,7 +126,7 @@ fun Routes() {
             arguments = listOf(
                 navArgument("target") { type = NavType.StringType },
                 navArgument("milestone") { type = NavType.IntType }
-                )
+            )
         ) {
             val targetId = it.arguments?.getString("target") ?: run {
                 navController.navigate(ScreenEnum.HOME.route)
@@ -136,7 +136,7 @@ fun Routes() {
                 navController.navigate(ScreenEnum.HOME.route)
                 return@composable
             }
-            val target = loadTarget(LocalContext.current, targetId)?:run{
+            val target = loadTarget(LocalContext.current, targetId) ?: run {
                 navController.navigate(ScreenEnum.HOME.route)
                 return@composable
             }

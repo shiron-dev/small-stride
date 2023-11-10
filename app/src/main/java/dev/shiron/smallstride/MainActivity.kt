@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -61,11 +63,20 @@ class MainActivity : ComponentActivity() {
 fun Routes() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = ScreenEnum.HOME.route) {
-        composable(ScreenEnum.HOME.route, enterTransition = null, exitTransition = null) {
+    NavHost(
+        navController = navController,
+        startDestination = ScreenEnum.HOME.route,
+        enterTransition = {
+              EnterTransition.None
+        },
+        exitTransition = {
+            ExitTransition.None
+        }
+    ) {
+        composable(ScreenEnum.HOME.route) {
             HomeScreen(navController = navController, loadAllTarget(LocalContext.current))
         }
-        composable(ScreenEnum.TARGET_CREATE.route, enterTransition = null, exitTransition = null) {
+        composable(ScreenEnum.TARGET_CREATE.route) {
             TargetCreateScreen(navController = navController)
         }
         composable(
@@ -73,9 +84,7 @@ fun Routes() {
             arguments = listOf(
                 navArgument("inputStr") { type = NavType.StringType },
                 navArgument("day") { type = NavType.IntType }
-            ),
-            enterTransition = null,
-            exitTransition = null
+            )
         ) {
             val inputStr = it.arguments?.getString("inputStr") ?: run {
                 TargetCreateScreen(navController = navController)
@@ -88,17 +97,13 @@ fun Routes() {
             TargetCreateScreen(navController = navController, inputStr = inputStr, endDayAt = day)
         }
         composable(
-            ScreenEnum.NOW_LOADING.route,
-            enterTransition = null,
-            exitTransition = null
+            ScreenEnum.NOW_LOADING.route
         ) {
             NowLoadingScreen()
         }
         composable(
             route = ScreenEnum.TARGET_RESULT.route,
-            arguments = listOf(navArgument("target") { type = NavType.StringType }),
-            enterTransition = null,
-            exitTransition = null
+            arguments = listOf(navArgument("target") { type = NavType.StringType })
         ) {
             val targetID = it.arguments?.getString("target") ?: run {
                 navController.navigate(ScreenEnum.TARGET_CREATE.route)
@@ -110,14 +115,12 @@ fun Routes() {
             }
             TargetGenResultScreen(navController, target)
         }
-        composable(ScreenEnum.ALL_CALENDER.route, enterTransition = null, exitTransition = null) {
+        composable(ScreenEnum.ALL_CALENDER.route) {
             AllCalenderScreen(navController, loadAllTarget(LocalContext.current))
         }
         composable(
             route = ScreenEnum.TARGET_CALENDER.route,
-            arguments = listOf(navArgument("target") { type = NavType.StringType }),
-            enterTransition = null,
-            exitTransition = null
+            arguments = listOf(navArgument("target") { type = NavType.StringType })
         ) {
             val targetID = it.arguments?.getString("target") ?: run {
                 navController.navigate(ScreenEnum.HOME.route)
@@ -134,9 +137,7 @@ fun Routes() {
             arguments = listOf(
                 navArgument("target") { type = NavType.StringType },
                 navArgument("milestone") { type = NavType.IntType }
-            ),
-            enterTransition = null,
-            exitTransition = null
+            )
         ) {
             val targetId = it.arguments?.getString("target") ?: run {
                 navController.navigate(ScreenEnum.HOME.route)

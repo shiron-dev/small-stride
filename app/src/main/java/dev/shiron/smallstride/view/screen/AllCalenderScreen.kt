@@ -6,9 +6,8 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,6 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import dev.shiron.smallstride.model.MilestoneClass
 import dev.shiron.smallstride.model.TargetClass
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
+import dev.shiron.smallstride.view.component.MyScaffold
 import dev.shiron.smallstride.view.dummyTarget
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -34,62 +34,38 @@ import java.util.Date
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AllCalenderScreen(navController: NavController, targets: List<TargetClass>) {
-    Column(
-        verticalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(start = 20.dp, top = 20.dp, end = 20.dp, bottom = 20.dp)
-    ) {
-        Text(
-            "全体マイルストーン確認",
-            style = TextStyle(
-                fontSize = 24.sp,
-                fontWeight = FontWeight(400),
-                color = Color(0xFF000000)
-            )
-        )
-        MilestonesList(navController, targets)
-        Button(
-            onClick = { navController.navigate("home") },
-            colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("ホームに戻る")
-        }
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-private fun MilestonesList(navController: NavController, targets: List<TargetClass>) {
-    val milestones = mutableListOf<Pair<Date, Pair<TargetClass, Int>>>()
-    for (target in targets) {
-        for ((index, milestone) in target.milestones.withIndex()) {
-            val calender = Calendar.getInstance()
-            calender.time = target.startDay
-            calender.add(Calendar.DATE, milestone.dayAt)
-            milestones.add(Pair(calender.time, Pair(target, index)))
-        }
-    }
-    milestones.sortBy { it.first.time }
-
-    Column(
-        modifier = Modifier
-            .padding(10.dp).verticalScroll(rememberScrollState())
-    ) {
-        var lastDate = Date(0)
-        var miles = mutableListOf<Pair<TargetClass, Int>>()
-        for (milestone in milestones) {
-            if (milestone.first != lastDate) {
-                if (miles.isNotEmpty()) {
-                    MilestoneList(navController, date = lastDate, miles = miles)
+    MyScaffold(navController = navController, title = "全体の予定") { padding ->
+        LazyColumn(contentPadding = padding) {
+            val milestones = mutableListOf<Pair<Date, Pair<TargetClass, Int>>>()
+            for (target in targets) {
+                for ((index, milestone) in target.milestones.withIndex()) {
+                    val calender = Calendar.getInstance()
+                    calender.time = target.startDay
+                    calender.add(Calendar.DATE, milestone.dayAt)
+                    milestones.add(Pair(calender.time, Pair(target, index)))
                 }
-                miles = mutableListOf()
-                lastDate = milestone.first
             }
-            miles.add(milestone.second)
+            milestones.sortBy { it.first.time }
+
+            var lastDate = Date(0)
+            var miles = mutableListOf<Pair<TargetClass, Int>>()
+            val viewData = mutableListOf<Pair<Date,MutableList<Pair<TargetClass, Int>>>>()
+            for (milestone in milestones) {
+                if (milestone.first != lastDate) {
+                    if (miles.isNotEmpty()) {
+                        viewData.add(Pair(lastDate, miles))
+                    }
+                    miles = mutableListOf()
+                    lastDate = milestone.first
+                }
+                miles.add(milestone.second)
+            }
+            viewData.add(Pair(lastDate, miles))
+
+            items(viewData.size) { it1 ->
+                MilestoneList(navController, viewData[it1].first, viewData[it1].second)
+            }
         }
-        MilestoneList(navController, date = lastDate, miles = miles)
     }
 }
 

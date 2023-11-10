@@ -9,6 +9,8 @@ import java.io.FileReader
 import java.io.FileWriter
 import java.io.IOException
 
+private val targetCache = mutableMapOf<String, TargetClass>()
+
 fun loadFileList(context: Context): FileListClass {
     return readFile(context, "fileList.json")?.let { Gson().fromJson(it, FileListClass::class.java) } ?: FileListClass(mutableListOf())
 }
@@ -20,6 +22,7 @@ fun saveTarget(context: Context, targetClass: TargetClass): TargetClass {
     }
 
     saveFile(context, targetClass.fileName, Gson().toJson(targetClass))
+    targetCache[targetClass.fileName] = targetClass
 
     saveFile(context, "fileList.json", Gson().toJson(fileList))
 
@@ -30,13 +33,18 @@ fun loadAllTarget(context: Context): List<TargetClass> {
     val fileList = loadFileList(context)
     val ret = mutableListOf<TargetClass>()
     for (fileName in fileList.files) {
-        ret.add(Gson().fromJson(readFile(context, fileName), TargetClass::class.java))
+        loadTarget(context, fileName)?.let { ret.add(it) }
     }
     return ret
 }
 
 fun loadTarget(context: Context, fileName: String): TargetClass? {
-    return Gson().fromJson(readFile(context, fileName), TargetClass::class.java)
+    if(targetCache.containsKey(fileName)) {
+        return targetCache[fileName]
+    }
+    val ret = Gson().fromJson(readFile(context, fileName), TargetClass::class.java)
+    targetCache[fileName] = ret
+    return ret
 }
 
 private fun readFile(context: Context, fileName: String): String? {

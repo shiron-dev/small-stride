@@ -30,7 +30,7 @@ import dev.shiron.smallstride.view.dummyTarget
 
 @Composable
 fun HomeScreen(navController: NavController, targets: List<TargetClass>) {
-    MyScaffold(navController = navController, "Home") {
+    MyScaffold(navController = navController, "現在進行中のマイルストーン") {
         LazyColumn(
             contentPadding = it,
             modifier = Modifier.padding(start = 20.dp, end = 20.dp),

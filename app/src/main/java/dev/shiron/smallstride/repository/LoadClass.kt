@@ -35,6 +35,10 @@ fun loadAllTarget(context: Context): List<TargetClass> {
     return ret
 }
 
+fun loadTarget(context: Context, fileName: String): TargetClass? {
+    return Gson().fromJson(readFile(context, fileName), TargetClass::class.java)
+}
+
 private fun readFile(context: Context, fileName: String): String? {
     val file = File(context.filesDir, fileName)
     var text: String? = null

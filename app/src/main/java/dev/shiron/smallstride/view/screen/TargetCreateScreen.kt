@@ -19,6 +19,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -35,15 +36,14 @@ import androidx.navigation.compose.rememberNavController
 import dev.shiron.smallstride.model.ReqTargetClass
 import dev.shiron.smallstride.repository.callApi
 import dev.shiron.smallstride.repository.saveWip
-import dev.shiron.smallstride.tmpTarget
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
 import dev.shiron.smallstride.view.ScreenEnum
 import java.util.Date
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun TargetCreateScreen(navController: NavController, inputStr: String? = null) {
-    var selectedNum by remember { mutableStateOf(tmpTarget?.endDayAt ?: 30) }
+fun TargetCreateScreen(navController: NavController, inputStr: String? = null, endDayAt: Int? = null) {
+    var selectedNum by remember { mutableIntStateOf(endDayAt ?: 30) }
     val titleInput = remember { mutableStateOf(inputStr ?: "") }
 
     Column(

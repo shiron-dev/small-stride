@@ -31,8 +31,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import dev.shiron.smallstride.model.MilestoneClass
 import dev.shiron.smallstride.model.TargetClass
-import dev.shiron.smallstride.tmpMilestone
-import dev.shiron.smallstride.tmpTarget
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
 import dev.shiron.smallstride.view.ScreenEnum
 import dev.shiron.smallstride.view.dummyTarget
@@ -51,8 +49,6 @@ fun HomeScreen(navController: NavController, targets: List<TargetClass>) {
         ) {
             // Child views.
             NewTargetButton {
-                tmpTarget = null
-                tmpMilestone = null
                 navController.navigate(ScreenEnum.TARGET_CREATE.route)
             }
             MilestoneList(targets, navController)
@@ -91,8 +87,7 @@ fun MilestoneList(milestoneList: List<TargetClass>, navController: NavController
         for (milestone in milestoneList) {
             if (milestone.getDayAt() > milestone.endDayAt) continue
             Milestone(milestone = milestone) {
-                tmpTarget = milestone
-                navController.navigate("calender/target")
+                navController.navigate("calender/target/${milestone.fileName}")
             }
         }
     }

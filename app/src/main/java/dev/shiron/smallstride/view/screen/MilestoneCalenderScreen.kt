@@ -21,9 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import dev.shiron.smallstride.model.MilestoneClass
 import dev.shiron.smallstride.model.TargetClass
-import dev.shiron.smallstride.tmpTarget
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
 import dev.shiron.smallstride.view.dummyTarget
 import java.text.SimpleDateFormat
@@ -31,7 +29,8 @@ import java.util.Calendar
 
 @SuppressLint("SimpleDateFormat")
 @Composable
-fun MilestoneCalenderScreen(navController: NavController, target: TargetClass, milestone: MilestoneClass) {
+fun MilestoneCalenderScreen(navController: NavController, target: TargetClass, milestoneIndex: Int) {
+    val milestone = target.milestones[milestoneIndex]
     Column(
         verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.Top),
         modifier = Modifier
@@ -91,8 +90,7 @@ fun MilestoneCalenderScreen(navController: NavController, target: TargetClass, m
         Column {
             Button(
                 onClick = {
-                    tmpTarget = target
-                    navController.navigate("calender/target")
+                    navController.navigate("calender/target/${target.fileName}")
                 },
                 colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
                 modifier = Modifier.fillMaxWidth()
@@ -114,6 +112,6 @@ fun MilestoneCalenderScreen(navController: NavController, target: TargetClass, m
 @Composable
 fun MilestoneCalenderScreen() {
     SmallStrideTheme {
-        MilestoneCalenderScreen(rememberNavController(), dummyTarget, dummyTarget.milestones.first())
+        MilestoneCalenderScreen(rememberNavController(), dummyTarget, 0)
     }
 }

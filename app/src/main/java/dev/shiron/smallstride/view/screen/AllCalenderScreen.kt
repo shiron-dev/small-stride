@@ -23,8 +23,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import dev.shiron.smallstride.model.MilestoneClass
 import dev.shiron.smallstride.model.TargetClass
-import dev.shiron.smallstride.tmpMilestone
-import dev.shiron.smallstride.tmpTarget
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
 import dev.shiron.smallstride.view.dummyTarget
 import java.text.SimpleDateFormat
@@ -64,13 +62,13 @@ fun AllCalenderScreen(navController: NavController, targets: List<TargetClass>) 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 private fun MilestonesList(navController: NavController, targets: List<TargetClass>) {
-    val milestones = mutableListOf<Pair<Date, Pair<TargetClass, MilestoneClass>>>()
+    val milestones = mutableListOf<Pair<Date, Pair<TargetClass, Int>>>()
     for (target in targets) {
-        for (milestone in target.milestones) {
+        for ((index, milestone) in target.milestones.withIndex()) {
             val calender = Calendar.getInstance()
             calender.time = target.startDay
             calender.add(Calendar.DATE, milestone.dayAt)
-            milestones.add(Pair(calender.time, Pair(target, milestone)))
+            milestones.add(Pair(calender.time, Pair(target, index)))
         }
     }
     milestones.sortBy { it.first.time }
@@ -80,7 +78,7 @@ private fun MilestonesList(navController: NavController, targets: List<TargetCla
             .padding(10.dp).verticalScroll(rememberScrollState())
     ) {
         var lastDate = Date(0)
-        var miles = mutableListOf<Pair<TargetClass, MilestoneClass>>()
+        var miles = mutableListOf<Pair<TargetClass, Int>>()
         for (milestone in milestones) {
             if (milestone.first != lastDate) {
                 if (miles.isNotEmpty()) {
@@ -98,7 +96,7 @@ private fun MilestonesList(navController: NavController, targets: List<TargetCla
 @SuppressLint("SimpleDateFormat")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-private fun MilestoneList(navController: NavController, date: Date, miles: List<Pair<TargetClass, MilestoneClass>>) {
+private fun MilestoneList(navController: NavController, date: Date, miles: List<Pair<TargetClass, Int>>) {
     var modifier = Modifier.padding(10.dp)
     if (date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate() == LocalDate.now()) {
         modifier = modifier
@@ -123,10 +121,8 @@ private fun MilestoneList(navController: NavController, date: Date, miles: List<
         )
         Column(modifier = Modifier.fillMaxWidth()) {
             for (mile in miles) {
-                CalMilestoneContent(mile.first, mile.second) {
-                    tmpTarget = mile.first
-                    tmpMilestone = mile.second
-                    navController.navigate("calender/milestone")
+                CalMilestoneContent(mile.first, mile.first.milestones[mile.second]) {
+                    navController.navigate("calender/milestone/${mile.first.fileName}/${mile.second}")
                 }
             }
         }

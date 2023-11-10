@@ -6,6 +6,6 @@ enum class ScreenEnum(val route: String) {
     NOW_LOADING("nowloading"),
     TARGET_RESULT("target/result/{target}"),
     TARGET_CALENDER("calender/target/{target}"),
-    MILESTONE_CALENDER("calender/milestone/{target}"),
+    MILESTONE_CALENDER("calender/milestone/{target}/{milestone}"),
     ALL_CALENDER("calender/all")
 }

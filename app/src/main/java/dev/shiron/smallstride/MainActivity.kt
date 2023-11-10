@@ -16,22 +16,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import dev.shiron.smallstride.model.MilestoneClass
-import dev.shiron.smallstride.model.TargetClass
 import dev.shiron.smallstride.repository.loadAllTarget
+import dev.shiron.smallstride.repository.loadTarget
 import dev.shiron.smallstride.repository.readWip
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
 import dev.shiron.smallstride.view.ScreenEnum
 import dev.shiron.smallstride.view.screen.AllCalenderScreen
 import dev.shiron.smallstride.view.screen.HomeScreen
 import dev.shiron.smallstride.view.screen.MilestoneCalenderScreen
-import dev.shiron.smallstride.view.screen.TargetCreateScreen
 import dev.shiron.smallstride.view.screen.NowLoadingScreen
 import dev.shiron.smallstride.view.screen.TargetCalenderScreen
+import dev.shiron.smallstride.view.screen.TargetCreateScreen
 import dev.shiron.smallstride.view.screen.TargetGenResultScreen
-
-var tmpTarget: TargetClass? = null
-var tmpMilestone: MilestoneClass? = null
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -96,6 +92,7 @@ fun Routes() {
             route = ScreenEnum.TARGET_RESULT.route,
             arguments = listOf(navArgument("target") { type = NavType.StringType })
         ) {
+            // TODO: 日数の保持
             val targetID = it.arguments?.getString("target") ?: run {
                 navController.navigate(ScreenEnum.TARGET_CREATE.route)
                 return@composable
@@ -109,23 +106,40 @@ fun Routes() {
         composable(ScreenEnum.ALL_CALENDER.route) {
             AllCalenderScreen(navController, loadAllTarget(LocalContext.current))
         }
-        composable(ScreenEnum.TARGET_CALENDER.route) {
-            if (tmpTarget != null) {
-                TargetCalenderScreen(navController, tmpTarget!!)
-            } else {
-                tmpTarget = null
-                tmpMilestone = null
+        composable(
+            route = ScreenEnum.TARGET_CALENDER.route,
+            arguments = listOf(navArgument("target") { type = NavType.StringType })
+        ) {
+            val targetID = it.arguments?.getString("target") ?: run {
                 navController.navigate(ScreenEnum.HOME.route)
+                return@composable
             }
+            val target = loadTarget(LocalContext.current, targetID)?:run{
+                navController.navigate(ScreenEnum.HOME.route)
+                return@composable
+            }
+            TargetCalenderScreen(navController, target)
         }
-        composable(ScreenEnum.MILESTONE_CALENDER.route) {
-            if (tmpMilestone != null && tmpTarget != null) {
-                MilestoneCalenderScreen(navController, tmpTarget!!, tmpMilestone!!)
-            } else {
-                tmpTarget = null
-                tmpMilestone = null
+        composable(
+            route = ScreenEnum.MILESTONE_CALENDER.route,
+            arguments = listOf(
+                navArgument("target") { type = NavType.StringType },
+                navArgument("milestone") { type = NavType.IntType }
+                )
+        ) {
+            val targetId = it.arguments?.getString("target") ?: run {
                 navController.navigate(ScreenEnum.HOME.route)
+                return@composable
             }
+            val milestoneId = it.arguments?.getInt("milestone") ?: run {
+                navController.navigate(ScreenEnum.HOME.route)
+                return@composable
+            }
+            val target = loadTarget(LocalContext.current, targetId)?:run{
+                navController.navigate(ScreenEnum.HOME.route)
+                return@composable
+            }
+            MilestoneCalenderScreen(navController, target, milestoneId)
         }
     }
 }

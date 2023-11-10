@@ -30,8 +30,6 @@ import androidx.navigation.compose.rememberNavController
 import dev.shiron.smallstride.model.MilestoneClass
 import dev.shiron.smallstride.model.TargetClass
 import dev.shiron.smallstride.repository.saveTarget
-import dev.shiron.smallstride.tmpMilestone
-import dev.shiron.smallstride.tmpTarget
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
 import dev.shiron.smallstride.view.ScreenEnum
 import dev.shiron.smallstride.view.dummyTarget
@@ -67,11 +65,9 @@ private fun MilestonesList(navController: NavController, target: TargetClass) {
         modifier = Modifier
             .padding(10.dp).verticalScroll(rememberScrollState())
     ) {
-        for (mile in target.milestones) {
+        for ((index,mile) in target.milestones.withIndex()) {
             CalMilestoneContent(target.startDay, mile, nowMilestone == mile) {
-                tmpTarget = target
-                tmpMilestone = mile
-                navController.navigate("calender/milestone")
+                navController.navigate("calender/milestone/${target.fileName}/$index")
             }
         }
         Column {

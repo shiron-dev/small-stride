@@ -65,23 +65,25 @@ fun Routes() {
         composable(ScreenEnum.HOME.route) {
             HomeScreen(navController = navController, loadAllTarget(LocalContext.current))
         }
-        composable(
-            ScreenEnum.TARGET_CREATE.route
-        ) {
+        composable(ScreenEnum.TARGET_CREATE.route){
             TargetCreateScreen(navController = navController)
         }
         composable(
-            ScreenEnum.TARGET_CREATE.route,
-            arguments = listOf(navArgument("inputStr") { type = NavType.StringType })
+            "${ScreenEnum.TARGET_CREATE.route}/{inputStr}/{day}",
+            arguments = listOf(
+                navArgument("inputStr") { type = NavType.StringType },
+                navArgument("day") { type = NavType.IntType }
+            )
         ) {
             val inputStr = it.arguments?.getString("inputStr") ?: run {
                 TargetCreateScreen(navController = navController)
                 return@composable
             }
-            if(inputStr == "{inputStr}")
-                TargetCreateScreen(navController = navController)
-            else
+            val day = it.arguments?.getInt("day") ?: run {
                 TargetCreateScreen(navController = navController, inputStr = inputStr)
+                return@composable
+            }
+            TargetCreateScreen(navController = navController, inputStr = inputStr, endDayAt = day)
         }
         composable(
             ScreenEnum.NOW_LOADING.route
@@ -92,7 +94,6 @@ fun Routes() {
             route = ScreenEnum.TARGET_RESULT.route,
             arguments = listOf(navArgument("target") { type = NavType.StringType })
         ) {
-            // TODO: 日数の保持
             val targetID = it.arguments?.getString("target") ?: run {
                 navController.navigate(ScreenEnum.TARGET_CREATE.route)
                 return@composable

@@ -49,7 +49,7 @@ fun AllCalenderScreen(navController: NavController, targets: List<TargetClass>) 
 
             var lastDate = Date(0)
             var miles = mutableListOf<Pair<TargetClass, Int>>()
-            val viewData = mutableListOf<Pair<Date,MutableList<Pair<TargetClass, Int>>>>()
+            val viewData = mutableListOf<Pair<Date, MutableList<Pair<TargetClass, Int>>>>()
             for (milestone in milestones) {
                 if (milestone.first != lastDate) {
                     if (miles.isNotEmpty()) {

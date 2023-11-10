@@ -39,7 +39,7 @@ fun loadAllTarget(context: Context): List<TargetClass> {
 }
 
 fun loadTarget(context: Context, fileName: String): TargetClass? {
-    if(targetCache.containsKey(fileName)) {
+    if (targetCache.containsKey(fileName)) {
         return targetCache[fileName]
     }
     val ret = Gson().fromJson(readFile(context, fileName), TargetClass::class.java)

@@ -23,11 +23,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import dev.shiron.smallstride.model.MilestoneClass
 import dev.shiron.smallstride.model.TargetClass
 import dev.shiron.smallstride.tmpMilestone
 import dev.shiron.smallstride.tmpTarget
@@ -74,25 +76,6 @@ fun HomeScreen(navController: NavController, targets: List<TargetClass>) {
                     )
                 )
             }
-            /*
-            Button(
-                onClick = { /*TODO*/ },
-                colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
-                modifier = Modifier.fillMaxWidth()
-
-            ) {
-                Text(
-                    text = "設定画面へ",
-                    style = TextStyle(
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight(500),
-                        color = Color(0xFFFFFFFF),
-                        textAlign = TextAlign.Center,
-                    )
-                )
-            }
-
-             */
         }
     }
 }
@@ -126,7 +109,7 @@ fun Milestone(milestone: TargetClass, onClick: () -> Unit) {
         )
     ) {
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
+            //horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .border(
@@ -138,56 +121,51 @@ fun Milestone(milestone: TargetClass, onClick: () -> Unit) {
                 .padding(start = 3.dp, top = 3.dp, end = 3.dp, bottom = 3.dp)
                 .fillMaxWidth()
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
+            Box(
+                contentAlignment = Alignment.Center
             ) {
-                Box(
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(
-                        progress = milestone.getDayAt().toFloat() / milestone.endDayAt.toFloat(),
-                        color = Color(0xFF8395F9)
-                    )
-                    Text("Day${milestone.getDayAt()}", color = Color(0xFF022859))
-                }
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
-                    horizontalAlignment = Alignment.Start
+                CircularProgressIndicator(
+                    progress = milestone.getDayAt().toFloat() / milestone.endDayAt.toFloat(),
+                    color = Color(0xFF8395F9)
+                )
+                Text("Day${milestone.getDayAt()}", color = Color(0xFF022859))
+            }
+            Column(
+               // verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
+                horizontalAlignment = Alignment.Start,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "${milestone.endDayAt}日で${milestone.title}",
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight(400),
+                        color = Color(0xFF022859)
+                    ),
+                    modifier = Modifier.fillMaxWidth(),
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
+                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .padding(start = 20.dp)
+                        .fillMaxWidth()
                 ) {
                     Text(
-                        text = "${milestone.endDayAt}日で${milestone.title}",
+                        text = milestone.getNowMilestone().title,
                         style = TextStyle(
-                            fontSize = 16.sp,
+                            fontSize = 24.sp,
                             fontWeight = FontWeight(400),
                             color = Color(0xFF022859)
-                        )
+                        ),
+                        modifier = Modifier.fillMaxWidth(),
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
                     )
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(start = 20.dp)
-                    ) {
-                        Text(
-                            text = milestone.getNowMilestone()?.title ?: "",
-                            style = TextStyle(
-                                fontSize = 24.sp,
-                                fontWeight = FontWeight(400),
-                                color = Color(0xFF022859)
-                            )
-                        )
-                    }
                 }
             }
-            Text(
-                text = ">",
-                style = TextStyle(
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFF022859),
-                    textAlign = TextAlign.Center
-                ),
-                modifier = Modifier.padding(4.dp)
-            )
         }
     }
 }
@@ -230,7 +208,7 @@ fun NewTargetButton(onClick: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun HomePreview() {
-    val target2 = dummyTarget.copy(title = "マイルストーン2!!")
+    val target2 = dummyTarget.copy(title = "マイルストーン2!!", milestones = listOf(MilestoneClass("長めのマイルストーンのタイトルです。すごく長いです。", "hoge",2)))
     SmallStrideTheme {
         HomeScreen(navController = rememberNavController(), listOf(dummyTarget, target2))
     }

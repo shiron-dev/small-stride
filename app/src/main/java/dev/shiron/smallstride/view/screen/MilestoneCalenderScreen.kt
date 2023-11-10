@@ -1,22 +1,16 @@
 package dev.shiron.smallstride.view.screen
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,8 +32,6 @@ import java.util.Calendar
 @SuppressLint("SimpleDateFormat")
 @Composable
 fun MilestoneCalenderScreen(navController: NavController, target: TargetClass, milestone: MilestoneClass) {
-    var expanded by remember { mutableStateOf(false) }
-
     Column(
         verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.Top),
         modifier = Modifier
@@ -85,41 +77,15 @@ fun MilestoneCalenderScreen(navController: NavController, target: TargetClass, m
                     color = Color(0xFF000000)
                 )
             )
-            Button(
-                onClick = { expanded = !expanded },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(
-                        width = 1.dp,
-                        color = Color(0xFF022859),
-                        shape = RoundedCornerShape(size = 8.dp)
-                    ),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White.copy(
-                        alpha = 0f
+            Column {
+                Text(
+                    text = milestone.hint,
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight(400),
+                        color = Color(0xFF000000)
                     )
                 )
-            ) {
-                Column {
-                    Text(
-                        text = "Hintを${if (expanded) "閉じる" else "開く" }",
-                        style = TextStyle(
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight(400),
-                            color = Color(0xFF000000)
-                        )
-                    )
-                    if (expanded) {
-                        Text(
-                            text = milestone.hint,
-                            style = TextStyle(
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight(400),
-                                color = Color(0xFF000000)
-                            )
-                        )
-                    }
-                }
             }
         }
         Column {

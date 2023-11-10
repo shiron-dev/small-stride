@@ -59,16 +59,27 @@ fun TargetCreateScreen(navController: NavController) {
                 color = Color(0xFF000000)
             )
         )
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
-            verticalAlignment = Alignment.CenterVertically,
+        Column(
+            // horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
+            // verticalAlignment = Alignment.CenterVertically,
+            // verticalArrangement = Arrangement.spacedBy(100.dp, Alignment.Top),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.Top),
             modifier = Modifier
-                .height(50.dp)
-                .padding(start = 0.dp, top = 0.dp, end = 10.dp, bottom = 0.dp)
+                .height(120.dp)
+                .padding(start = 50.dp, top = 0.dp, end = 50.dp, bottom = 0.dp)
         ) {
-            DayDropDownMenu(selectedNum) {
-                selectedNum = it
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "目標達成までの期間")
+                DayDropDownMenu(selectedNum) {
+                    selectedNum = it
+                }
             }
+
             Row(
                 horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
                 verticalAlignment = Alignment.CenterVertically,

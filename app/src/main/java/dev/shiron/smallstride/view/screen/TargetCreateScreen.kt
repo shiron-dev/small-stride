@@ -14,10 +14,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -43,117 +45,132 @@ import java.util.Date
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun TargetCreateScreen(navController: NavController, inputStr: String? = null, endDayAt: Int? = null) {
+fun TargetCreateScreen(navController: NavController, inputStr: String? = null, endDayAt: Int? = null, isBottom: Boolean = false) {
     var selectedNum by remember { mutableIntStateOf(endDayAt ?: 30) }
     val titleInput = remember { mutableStateOf(inputStr ?: "") }
 
-    Column(
-        modifier = Modifier.fillMaxWidth().padding(20.dp),
-        verticalArrangement = Arrangement.spacedBy(100.dp, Alignment.Top),
-        horizontalAlignment = Alignment.CenterHorizontally
+    Scaffold {
+        LazyColumn(contentPadding = it) {
+            item {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                    verticalArrangement = Arrangement.spacedBy(
+                        (if (isBottom) 10 else 100).dp,
+                        Alignment.Top
+                    ),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "${selectedNum}日で達成したい目標を\n入力しましょう！",
+                        style = TextStyle(
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight(400),
+                            color = Color(0xFF000000)
+                        ),
+                        textAlign = TextAlign.Center
+                    )
+                    Column(
+                        // horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
+                        // verticalAlignment = Alignment.CenterVertically,
+                        // verticalArrangement = Arrangement.spacedBy(100.dp, Alignment.Top),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.Top),
+                        modifier = Modifier
+                            .padding(start = 30.dp, top = 0.dp, end = 30.dp, bottom = 0.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(text = "目標達成までの期間")
+                            DayDropDownMenu(selectedNum) {
+                                selectedNum = it
+                            }
+                        }
+
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .border(
+                                    width = 1.dp,
+                                    color = Color(0xFF7E7E7E),
+                                    shape = RoundedCornerShape(size = 12.dp)
+                                )
+                                .background(
+                                    color = Color(0xFFFFFFFF),
+                                    shape = RoundedCornerShape(size = 12.dp)
+                                )
+                                .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 10.dp)
+                                .height(20.dp)
+                        ) {
+                            BasicTextField(
+                                modifier = Modifier.fillMaxSize(),
+                                value = titleInput.value,
+                                singleLine = true,
+                                onValueChange = { titleInput.value = it },
+                                decorationBox = { innerTextField ->
+                                    Box(modifier = Modifier.fillMaxSize()) {
+                                        if (titleInput.value.isEmpty()) {
+                                            Text(text = "目標を入力")
+                                        }
+                                        innerTextField()
+                                    }
+                                }
+                            )
+                        }
+                    }
+                    CreateButton(navController, titleInput, selectedNum)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun CreateButton(navController: NavController, titleInput: MutableState<String>, selectedNum: Int) {
+    Button(
+        onClick = {
+            if (titleInput.value.isEmpty())return@Button
+            val reqTarget = ReqTargetClass(
+                title = titleInput.value,
+                startDay = Date(),
+                endDayAt = selectedNum,
+                marginQuickDayAt = 0
+            )
+            callApi(reqTarget, onFailure = {
+                Log.d("callApi", it.toString())
+            }) {
+                if (it == null) {
+                    navController.navigate(ScreenEnum.TARGET_CREATE.route)
+                    return@callApi
+                }
+
+                saveWip(it)
+                navController.navigate("target/result/${it.fileName}") {
+                    popUpTo(ScreenEnum.NOW_LOADING.route) {
+                        // 指定の目的地（screen2）も含む
+                        inclusive = true
+                    }
+                }
+            }
+
+            navController.navigate("nowloading")
+        },
+        colors = ButtonDefaults.run { buttonColors(FloatingActionButtonDefaults.containerColor) },
+        modifier = Modifier.fillMaxWidth()
     ) {
         Text(
-            text = "${selectedNum}日で達成したい目標を\n入力しましょう！",
+            "作成",
             style = TextStyle(
-                fontSize = 24.sp,
+                fontSize = 16.sp,
                 fontWeight = FontWeight(400),
-                color = Color(0xFF000000)
-            ),
-            textAlign = TextAlign.Center
-        )
-        Column(
-            // horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
-            // verticalAlignment = Alignment.CenterVertically,
-            // verticalArrangement = Arrangement.spacedBy(100.dp, Alignment.Top),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.Top),
-            modifier = Modifier
-                .padding(start = 50.dp, top = 0.dp, end = 50.dp, bottom = 0.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(text = "目標達成までの期間")
-                DayDropDownMenu(selectedNum) {
-                    selectedNum = it
-                }
-            }
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .border(
-                        width = 1.dp,
-                        color = Color(0xFF7E7E7E),
-                        shape = RoundedCornerShape(size = 12.dp)
-                    )
-                    .background(
-                        color = Color(0xFFFFFFFF),
-                        shape = RoundedCornerShape(size = 12.dp)
-                    )
-                    .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 10.dp)
-                    .height(20.dp)
-            ) {
-                BasicTextField(
-                    modifier = Modifier.fillMaxSize(),
-                    value = titleInput.value,
-                    singleLine = true,
-                    onValueChange = { titleInput.value = it },
-                    decorationBox = { innerTextField ->
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            if (titleInput.value.isEmpty()) {
-                                Text(text = "目標を入力")
-                            }
-                            innerTextField()
-                        }
-                    }
-                )
-            }
-        }
-
-        Button(
-            onClick = {
-                if (titleInput.value.isEmpty())return@Button
-                val reqTarget = ReqTargetClass(
-                    title = titleInput.value,
-                    startDay = Date(),
-                    endDayAt = selectedNum,
-                    marginQuickDayAt = 0
-                )
-                callApi(reqTarget, onFailure = {
-                    Log.d("callApi", it.toString())
-                }) {
-                    if (it == null) {
-                        navController.navigate(ScreenEnum.TARGET_CREATE.route)
-                        return@callApi
-                    }
-
-                    saveWip(it)
-                    navController.navigate("target/result/${it.fileName}") {
-                        popUpTo(ScreenEnum.NOW_LOADING.route) {
-                            // 指定の目的地（screen2）も含む
-                            inclusive = true
-                        }
-                    }
-                }
-
-                navController.navigate("nowloading")
-            },
-            colors = ButtonDefaults.run { buttonColors(FloatingActionButtonDefaults.containerColor) },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                "作成",
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight(400),
-                    color = Color.DarkGray
-                )
+                color = Color.DarkGray
             )
-        }
+        )
     }
 }
 

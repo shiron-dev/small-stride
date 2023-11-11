@@ -3,6 +3,7 @@ package dev.shiron.smallstride.view.screen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,6 +18,7 @@ import dev.shiron.smallstride.view.component.MyScaffold
 import dev.shiron.smallstride.view.component.ProgressMilestone
 import dev.shiron.smallstride.view.dummyTarget
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController, targets: List<TargetClass>) {
     MyScaffold(navController = navController, "現在進行中のマイルストーン") {

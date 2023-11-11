@@ -52,37 +52,52 @@ fun MilestoneCalenderScreen(navController: NavController, target: TargetClass, m
                         )
                     )
                     Column(verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.Top)) {
-                        Row(horizontalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterHorizontally)) {
-                            Text(
-                                "Day${milestone.dayAt}",
-                                style = TextStyle(
-                                    fontSize = 22.sp,
-                                    fontWeight = FontWeight(400),
-                                    color = Color(0xFF000000)
+                        Column {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(
+                                    20.dp,
+                                    Alignment.CenterHorizontally
                                 )
-                            )
-                            val cal = Calendar.getInstance()
-                            cal.time = target.startDay
-                            cal.add(Calendar.DATE, milestone.dayAt)
-                            val format = SimpleDateFormat("MM/dd")
+                            ) {
+                                Text(
+                                    "Day${milestone.dayAt}",
+                                    style = TextStyle(
+                                        fontSize = 22.sp,
+                                        fontWeight = FontWeight(400),
+                                        color = Color(0xFF000000)
+                                    )
+                                )
+                                val cal = Calendar.getInstance()
+                                cal.time = target.startDay
+                                cal.add(Calendar.DATE, milestone.dayAt)
+                                val format = SimpleDateFormat("MM/dd")
+                                Text(
+                                    format.format(cal.time),
+                                    style = TextStyle(
+                                        fontSize = 22.sp,
+                                        fontWeight = FontWeight(400),
+                                        color = Color(0xFF000000)
+                                    )
+                                )
+                            }
                             Text(
-                                format.format(cal.time),
+                                milestone.title,
                                 style = TextStyle(
-                                    fontSize = 22.sp,
+                                    fontSize = 20.sp,
                                     fontWeight = FontWeight(400),
                                     color = Color(0xFF000000)
                                 )
                             )
                         }
-                        Text(
-                            milestone.title,
-                            style = TextStyle(
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight(400),
-                                color = Color(0xFF000000)
-                            )
-                        )
                         Column {
+                            Text(
+                                "ヒント",
+                                style = TextStyle(
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight(400),
+                                    color = Color(0xFF000000)
+                                )
+                            )
                             Text(
                                 text = milestone.hint,
                                 style = TextStyle(

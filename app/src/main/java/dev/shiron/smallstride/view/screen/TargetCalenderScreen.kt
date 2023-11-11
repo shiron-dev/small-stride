@@ -59,14 +59,14 @@ fun TargetCalenderScreen(navController: NavController, target: TargetClass) {
 
 @Composable
 private fun MilestonesList(navController: NavController, target: TargetClass) {
-    val nowMilestone = target.getNowMilestone()
+    val nowMilestoneIndex = target.getNowMilestoneIndex()
     val context = LocalContext.current
     Column(
         modifier = Modifier
             .padding(10.dp).verticalScroll(rememberScrollState())
     ) {
         for ((index, mile) in target.milestones.withIndex()) {
-            CalMilestoneContent(target.startDay, mile, nowMilestone == mile) {
+            CalMilestoneContent(target.startDay, mile, nowMilestoneIndex == index) {
                 navController.navigate("calender/milestone/${target.fileName}/$index")
             }
         }

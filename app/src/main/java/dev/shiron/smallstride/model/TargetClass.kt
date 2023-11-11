@@ -19,14 +19,14 @@ data class TargetClass(
         return diffDay.toInt() + 1
     }
 
-    fun getNowMilestone(): MilestoneClass {
+    fun getNowMilestoneIndex(): Int {
         val dayAt = getDayAt()
         var min = Int.MAX_VALUE
-        var ret: MilestoneClass = milestones.first()
-        for (milestone in milestones) {
+        var ret = 0
+        for ((index, milestone) in milestones.withIndex()) {
             if (dayAt >= milestone.dayAt && dayAt - milestone.dayAt < min) {
                 min = dayAt - milestone.dayAt
-                ret = milestone
+                ret = index
             }
         }
         return ret

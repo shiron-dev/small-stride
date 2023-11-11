@@ -67,7 +67,7 @@ fun Routes() {
         navController = navController,
         startDestination = ScreenEnum.HOME.route,
         enterTransition = {
-              EnterTransition.None
+            EnterTransition.None
         },
         exitTransition = {
             ExitTransition.None

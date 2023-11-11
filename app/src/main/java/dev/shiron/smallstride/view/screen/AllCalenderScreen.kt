@@ -3,7 +3,6 @@ package dev.shiron.smallstride.view.screen
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,10 +19,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import dev.shiron.smallstride.model.MilestoneClass
 import dev.shiron.smallstride.model.TargetClass
 import dev.shiron.smallstride.ui.theme.SmallStrideTheme
 import dev.shiron.smallstride.view.component.MyScaffold
+import dev.shiron.smallstride.view.component.ProgressMilestone
 import dev.shiron.smallstride.view.dummyTarget
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -95,91 +94,15 @@ private fun MilestoneList(navController: NavController, date: Date, miles: List<
                 color = Color(0xFF000000)
             )
         )
-        Column(modifier = Modifier.fillMaxWidth()) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.Top)
+        ) {
             for (mile in miles) {
-                CalMilestoneContent(mile.first, mile.first.milestones[mile.second]) {
+                ProgressMilestone(mile.first, mile.second) {
                     navController.navigate("calender/milestone/${mile.first.fileName}/${mile.second}")
                 }
             }
-        }
-    }
-}
-
-@Composable
-private fun CalMilestoneContent(
-    targetClass: TargetClass,
-    milestone: MilestoneClass,
-    onClick: () -> Unit
-) {
-    Button(
-        onClick = onClick,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color.Black.copy(
-                alpha = 0f
-            )
-        ),
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .border(
-                    width = 1.dp,
-                    color = Color(0xFF022859),
-                    shape = RoundedCornerShape(size = 8.dp)
-                )
-                .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 8.dp))
-                .fillMaxSize()
-        ) {
-            Row {
-                Box(
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(
-                        progress = milestone.dayAt.toFloat() / targetClass.endDayAt.toFloat(),
-                        color = Color(0xFF8395F9),
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
-                    Text("Day${milestone.dayAt}", color = Color(0xFF022859))
-                }
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.Top),
-                    horizontalAlignment = Alignment.Start
-                ) {
-                    Text(
-                        text = milestone.title,
-                        style = TextStyle(
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight(400),
-                            color = Color(0xFF022859)
-                        )
-                    )
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(start = 10.dp)
-                    ) {
-                        Text(
-                            text = milestone.title,
-                            style = TextStyle(
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight(400),
-                                color = Color(0xFF022859)
-                            )
-                        )
-                    }
-                }
-            }
-//            Column {
-//                Text(
-//                    text = ">",
-//                    style = TextStyle(
-//                        fontSize = 32.sp,
-//                        fontWeight = FontWeight(400),
-//                        color = Color(0xFF022859)
-//                    )
-//                )
-//            }
         }
     }
 }

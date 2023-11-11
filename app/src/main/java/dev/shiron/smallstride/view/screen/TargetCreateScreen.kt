@@ -41,7 +41,6 @@ import dev.shiron.smallstride.ui.theme.SmallStrideTheme
 import dev.shiron.smallstride.view.ScreenEnum
 import java.util.Date
 
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun TargetCreateScreen(navController: NavController, inputStr: String? = null, endDayAt: Int? = null) {

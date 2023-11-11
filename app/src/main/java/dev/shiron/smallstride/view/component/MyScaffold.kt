@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.BottomAppBar
@@ -16,6 +17,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -31,6 +33,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -51,10 +54,18 @@ fun MyScaffold(navController: NavController, title: String, content: @Composable
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(text = title)
+                    Text(
+                        text = title,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
                 },
                 navigationIcon = {
-                    // BackIconButton {}
+                    if (currentDestination?.route?.let { !isMainScreens(it) } == true) {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
+                        }
+                    }
                 },
                 scrollBehavior = scrollBehavior
             )
@@ -104,14 +115,21 @@ fun MyScaffold(navController: NavController, title: String, content: @Composable
         },
         floatingActionButtonPosition = FabPosition.End,
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    navController.navigate(ScreenEnum.TARGET_CREATE.route)
+            if (isMainScreens(currentDestination?.route ?: "")) {
+                FloatingActionButton(
+                    onClick = {
+                        navController.navigate(ScreenEnum.TARGET_CREATE.route)
+                    }
+                ) {
+                    Icon(imageVector = Icons.Filled.Add, contentDescription = null)
                 }
-            ) {
-                Icon(imageVector = Icons.Filled.Add, contentDescription = null)
             }
         },
         content = content
     )
+}
+
+private fun isMainScreens(route: String): Boolean {
+    return route == ScreenEnum.HOME.route ||
+        route == ScreenEnum.ALL_CALENDER.route
 }

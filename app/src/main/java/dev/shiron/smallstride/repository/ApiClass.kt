@@ -8,6 +8,7 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 import java.util.concurrent.TimeUnit
 
@@ -49,6 +50,36 @@ fun callApi(reqTargetClass: ReqTargetClass, onFailure: (Throwable) -> Unit = {},
         }
 
         override fun onFailure(call: Call<TargetClass>, t: Throwable) {
+            onFailure(t)
+        }
+    })
+}
+
+interface TimeApiInterface {
+    @GET("time")
+    fun getTimeData(): Call<Int>
+}
+
+private val timeRetrofit = Retrofit.Builder()
+    .baseUrl(API_ORIGIN)
+    .addConverterFactory(GsonConverterFactory.create())
+    .client(okHttpClient)
+    .build()
+
+fun callTimeApi(onFailure: (Throwable) -> Unit = {}, onResponse: (Int?) -> Unit) {
+    val timeApiInterface = timeRetrofit.create(TimeApiInterface::class.java)
+    val call = timeApiInterface.getTimeData()
+
+    call.enqueue(object : retrofit2.Callback<Int> {
+        override fun onResponse(call: Call<Int>, response: retrofit2.Response<Int>) {
+            if (response.isSuccessful) {
+                onResponse(response.body())
+            } else {
+                onResponse(null)
+            }
+        }
+
+        override fun onFailure(call: Call<Int>, t: Throwable) {
             onFailure(t)
         }
     })

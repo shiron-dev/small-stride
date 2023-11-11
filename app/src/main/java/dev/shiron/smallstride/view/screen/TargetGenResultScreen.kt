@@ -136,7 +136,7 @@ fun TargetGenResultScreen(navController: NavController, target: TargetClass) {
 fun MilestoneContent(startDay: Date, milestoneClass: MilestoneClass) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start),
-        verticalAlignment = Alignment.Top,
+        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
             .border(
@@ -146,8 +146,8 @@ fun MilestoneContent(startDay: Date, milestoneClass: MilestoneClass) {
             )
             .padding(start = 4.dp, top = 4.dp, end = 4.dp, bottom = 4.dp)
     ) {
-        Column {
-            Text("Day${milestoneClass.dayAt}")
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text("${milestoneClass.dayAt}日目")
             val calendar = Calendar.getInstance()
             calendar.time = startDay
             calendar.add(Calendar.DATE, milestoneClass.dayAt)

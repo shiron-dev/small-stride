@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,6 +41,7 @@ import dev.shiron.smallstride.ui.theme.SmallStrideTheme
 import dev.shiron.smallstride.view.ScreenEnum
 import java.util.Date
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun TargetCreateScreen(navController: NavController, inputStr: String? = null, endDayAt: Int? = null) {
@@ -47,17 +49,18 @@ fun TargetCreateScreen(navController: NavController, inputStr: String? = null, e
     val titleInput = remember { mutableStateOf(inputStr ?: "") }
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(100.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "${selectedNum}日で達成したい目標を入力しましょう！",
+            text = "${selectedNum}日で達成したい目標を\n入力しましょう！",
             style = TextStyle(
                 fontSize = 24.sp,
                 fontWeight = FontWeight(400),
                 color = Color(0xFF000000)
-            )
+            ),
+            textAlign = TextAlign.Center
         )
         Column(
             // horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
@@ -66,7 +69,6 @@ fun TargetCreateScreen(navController: NavController, inputStr: String? = null, e
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.Top),
             modifier = Modifier
-                .height(120.dp)
                 .padding(start = 50.dp, top = 0.dp, end = 50.dp, bottom = 0.dp)
         ) {
             Row(
@@ -94,15 +96,17 @@ fun TargetCreateScreen(navController: NavController, inputStr: String? = null, e
                         shape = RoundedCornerShape(size = 12.dp)
                     )
                     .padding(start = 10.dp, top = 10.dp, end = 10.dp, bottom = 10.dp)
+                    .height(20.dp)
             ) {
                 BasicTextField(
+                    modifier = Modifier.fillMaxSize(),
                     value = titleInput.value,
                     singleLine = true,
                     onValueChange = { titleInput.value = it },
                     decorationBox = { innerTextField ->
                         Box(modifier = Modifier.fillMaxSize()) {
                             if (titleInput.value.isEmpty()) {
-                                Text("目標を入力")
+                                Text(text = "目標を入力")
                             }
                             innerTextField()
                         }
@@ -139,12 +143,17 @@ fun TargetCreateScreen(navController: NavController, inputStr: String? = null, e
 
                 navController.navigate("nowloading")
             },
-            colors = ButtonDefaults.run { buttonColors(Color(0xFF80A8FF)) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(100.dp)
+            colors = ButtonDefaults.run { buttonColors(FloatingActionButtonDefaults.containerColor) },
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Text("作成")
+            Text(
+                "作成",
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight(400),
+                    color = Color.DarkGray
+                )
+            )
         }
     }
 }
@@ -167,14 +176,16 @@ fun DayDropDownMenu(selectedNum: Int, onClick: (item: Int) -> Unit) {
                 expanded = !expanded
             }
         ) {
-            TextField(
+            OutlinedTextField(
                 value = "${selectedNum}日",
                 onValueChange = {},
                 readOnly = true,
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                modifier = Modifier.menuAnchor()
+                modifier = Modifier.menuAnchor(),
+                shape = RoundedCornerShape(8.dp),
+                singleLine = true
             )
-            ExposedDropdownMenu(
+            DropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {

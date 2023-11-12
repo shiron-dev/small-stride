@@ -1,40 +1,53 @@
-package dev.shiron.smallstride
+package dev.shiron.smallstride.repository
 
 import android.content.Context
 import com.google.gson.Gson
-import dev.shiron.smallstride.domain.TargetClass
+import dev.shiron.smallstride.model.TargetClass
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 import java.io.IOException
 
-fun loadFileList(context: Context):FileListClass {
-    return readFile(context, "fileList.json")?.let{Gson().fromJson(it, FileListClass::class.java)} ?: FileListClass(mutableListOf())
+private val targetCache = mutableMapOf<String, TargetClass>()
+
+fun loadFileList(context: Context): FileListClass {
+    return readFile(context, "fileList.json")?.let { Gson().fromJson(it, FileListClass::class.java) } ?: FileListClass(mutableListOf())
 }
 
-fun saveTarget(context: Context, targetClass: TargetClass):TargetClass {
+fun saveTarget(context: Context, targetClass: TargetClass): TargetClass {
     val fileList = loadFileList(context)
-    if(!fileList.files.contains(targetClass.fileName))
+    if (!fileList.files.contains(targetClass.fileName)) {
         fileList.files.add(targetClass.fileName)
+    }
 
     saveFile(context, targetClass.fileName, Gson().toJson(targetClass))
+    targetCache[targetClass.fileName] = targetClass
 
     saveFile(context, "fileList.json", Gson().toJson(fileList))
 
     return targetClass
 }
 
-fun loadAllTarget(context: Context):List<TargetClass> {
+fun loadAllTarget(context: Context): List<TargetClass> {
     val fileList = loadFileList(context)
     val ret = mutableListOf<TargetClass>()
     for (fileName in fileList.files) {
-        ret.add(Gson().fromJson(readFile(context, fileName), TargetClass::class.java))
+        loadTarget(context, fileName)?.let { ret.add(it) }
     }
     return ret
 }
 
-private fun readFile(context:Context, fileName:String):String?{
+fun loadTarget(context: Context, fileName: String): TargetClass? {
+    if (targetCache.containsKey(fileName)) {
+        return targetCache[fileName]
+    }
+    val ret = Gson().fromJson(readFile(context, fileName), TargetClass::class.java)
+    targetCache[fileName] = ret
+    return ret
+}
+
+private fun readFile(context: Context, fileName: String): String? {
     val file = File(context.filesDir, fileName)
     var text: String? = null
     try {
@@ -45,7 +58,7 @@ private fun readFile(context:Context, fileName:String):String?{
     return text
 }
 
-private fun saveFile(context:Context, fileName:String, text:String){
+private fun saveFile(context: Context, fileName: String, text: String) {
     val file = File(context.filesDir, fileName)
     try {
         FileWriter(file).use { writer -> writer.write(text) }
